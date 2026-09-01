@@ -1,0 +1,24 @@
+{
+  "name": "digicensus",
+  "version": "1.0.0",
+  "description": "DigiCensus 2027 - India's Official Digital Census Web Application",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "server": "node server/index.js",
+    "start": "concurrently \"npm run dev\" \"npm run server\""
+  },
+  "dependencies": {
+    "chart.js": "^4.4.0",
+    "lucide-react": "^0.263.1",
+    "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.0.3",
+    "concurrently": "^8.2.0",
+    "vite": "^4.4.5"
+  }
+}

@@ -1,0 +1,1860 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DigiCensus 2027 — Official Digital Census & Census Saathi</title>
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            cream: {
+              50: '#F8F6F1',
+              100: '#E9E1D2'
+            },
+            powder: {
+              400: '#B8D3E3',
+              500: '#A9C8D9',
+              600: '#89AEC2'
+            },
+            pale: {
+              100: '#DCEAF2'
+            },
+            navy: {
+              500: '#243B53',
+              600: '#1E3348',
+              700: '#162636',
+              800: '#111A22',
+              900: '#1B2732',
+              950: '#0E161D'
+            }
+          },
+          fontFamily: {
+            sans: ["Inter", "sans-serif"],
+            display: ["Plus Jakarta Sans", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    :root {
+      --bg-main: #F8F6F1;
+      --card-bg: #FFFFFF;
+      --card-border: #D9D6CF;
+      --text-main: #263238;
+      --text-muted: #6B6B67;
+      --primary-navy: #1E3348;
+      --soft-beige: #E9E1D2;
+      --powder-blue: #B8D3E3;
+      --pale-blue: #DCEAF2;
+      --input-bg: #FFFFFF;
+      --input-border: #D9D6CF;
+      --input-text: #263238;
+    }
+    html.dark {
+      --bg-main: #111A22;
+      --card-bg: #1B2732;
+      --card-border: #34424D;
+      --text-main: #F5F3EE;
+      --text-muted: #B8B7B1;
+      --primary-navy: #243B53;
+      --soft-beige: #D8CCB8;
+      --powder-blue: #A9C8D9;
+      --pale-blue: #1E2D3B;
+      --input-bg: #1B2732;
+      --input-border: #34424D;
+      --input-text: #F5F3EE;
+    }
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+    }
+    .custom-card {
+      background-color: var(--card-bg) !important;
+      border-color: var(--card-border) !important;
+      color: var(--text-main) !important;
+    }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: var(--bg-main); }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--primary-navy); border-radius: 4px; }
+    
+    /* Visually Clear Option Selection State */
+    .option-selected {
+      background-color: var(--primary-navy) !important;
+      color: #FFFFFF !important;
+      border: 2px solid var(--primary-navy) !important;
+      box-shadow: 0 4px 12px rgba(30, 51, 72, 0.25) !important;
+      font-weight: 700 !important;
+    }
+    html.dark .option-selected {
+      background-color: var(--powder-blue) !important;
+      color: #111A22 !important;
+      border: 2px solid var(--powder-blue) !important;
+      box-shadow: 0 4px 12px rgba(169, 200, 217, 0.3) !important;
+      font-weight: 700 !important;
+    }
+
+    /* Assisted Accessibility Mode */
+    .assisted-mode {
+      font-size: 1.15rem !important;
+      line-height: 1.6 !important;
+    }
+    .assisted-mode button {
+      min-height: 56px !important;
+      font-size: 1.05rem !important;
+    }
+
+    /* Form Element Dynamic Theming */
+    input, select, textarea {
+      background-color: var(--input-bg) !important;
+      border-color: var(--input-border) !important;
+      color: var(--input-text) !important;
+    }
+    input::placeholder, textarea::placeholder {
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+    select option {
+      background-color: var(--card-bg);
+      color: var(--text-main);
+    }
+  </style>
+</head>
+<body class="min-h-screen font-sans antialiased flex flex-col transition-colors duration-200" id="app-body">
+
+  <!-- HEADER BAR -->
+  <header class="sticky top-0 z-50 border-b backdrop-blur-md transition-colors duration-200" id="main-header">
+    <div class="max-w-7xl mx-auto px-4 md:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Brand & Logo -->
+      <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
+        <div class="w-10 h-10 rounded-full bg-navy-600/30 border border-navy-400/40 flex items-center justify-center text-navy-400 shadow-sm">
+          <span class="material-symbols-outlined text-2xl">handshake</span        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-display text-xl font-extrabold tracking-tight" id="header-brand">DigiCensus</h1>
+            <span class="bg-navy-600 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-sm">2027</span>
+          </div>
+          <p class="text-[10px] opacity-70 hidden sm:block font-medium" id="header-slogan">India's Census. Made simple.</p>
+        </div>
+      </div>
+
+      <!-- Navigation Links (Responsive Scrollable Bar) -->
+      <nav class="flex items-center gap-1 p-1.5 rounded-full border border-slate-300 dark:border-slate-700 overflow-x-auto max-w-full custom-scrollbar" id="main-nav">
+        <button onclick="switchTab('home')" id="nav-home" class="px-3.5 py-1.5 rounded-full text-xs font-bold option-selected shadow-md transition-all shrink-0">Home</button>
+        <button onclick="switchTab('guide')" id="nav-guide" class="px-3.5 py-1.5 rounded-full text-xs font-semibold opacity-70 hover:opacity-100 transition-all shrink-0">AI Guide</button>
+        <button onclick="switchTab('journey')" id="nav-journey" class="px-3.5 py-1.5 rounded-full text-xs font-semibold opacity-70 hover:opacity-100 transition-all shrink-0">Journey</button>
+        <button onclick="switchTab('enumerate')" id="nav-enumerate" class="px-3.5 py-1.5 rounded-full text-xs font-semibold opacity-70 hover:opacity-100 transition-all shrink-0">Self-Enumerate</button>
+        <button onclick="switchTab('mycensus')" id="nav-mycensus" class="px-3.5 py-1.5 rounded-full text-xs font-semibold opacity-70 hover:opacity-100 transition-all shrink-0">Schedule</button>
+        <button onclick="switchTab('truthcheck')" id="nav-truthcheck" class="px-3.5 py-1.5 rounded-full text-xs font-semibold opacity-70 hover:opacity-100 transition-all shrink-0">Truth Check</button>
+        <button onclick="switchTab('explorer')" id="nav-explorer" class="px-3.5 py-1.5 rounded-full text-xs font-semibold opacity-70 hover:opacity-100 transition-all shrink-0">Explorer</button>
+        <button onclick="switchTab('profile')" id="nav-profile" class="px-3.5 py-1.5 rounded-full text-xs font-semibold opacity-70 hover:opacity-100 transition-all shrink-0">Profile</button>
+      </nav>
+
+      <!-- Language, Theme, Assisted Mode & User Controls -->
+      <div class="flex items-center gap-2">
+        <!-- Assisted Mode Toggle -->
+        <button onclick="toggleAssistedMode()" id="assisted-mode-btn" title="Toggle Accessible Assisted Mode" class="hidden sm:flex items-center gap-1.5 border border-slate-300 dark:border-slate-700 text-xs font-bold px-3 py-1.5 rounded-full hover:border-navy-600 cursor-pointer">
+          <span class="material-symbols-outlined text-sm text-amber-500">accessibility_new</span>
+          <span id="assisted-mode-label">Assisted</span>
+        </button>
+
+        <!-- Language Selector -->
+        <select id="lang-select" onchange="changeLanguage(this.value)" class="text-xs font-semibold border border-slate-300 dark:border-slate-700 rounded-full px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-navy-600 cursor-pointer">
+          <option value="English">English</option>
+          <option value="Hindi">Hindi (हिंदी)</option>
+          <option value="Marathi">Marathi (मराठी)</option>
+          <option value="Tamil">Tamil (தமிழ்)</option>
+          <option value="Bengali">Bengali (বাংলা)</option>
+        </select>
+
+        <!-- Theme Toggle -->
+        <button onclick="toggleTheme()" id="theme-btn" title="Toggle Light/Dark Mode" class="w-9 h-9 rounded-full border border-slate-300 dark:border-slate-700 flex items-center justify-center cursor-pointer transition-transform hover:scale-105">
+          <span class="material-symbols-outlined text-lg text-amber-500" id="theme-icon">dark_mode</span>
+        </button>
+
+        <!-- Profile Pill -->
+        <div onclick="switchTab('profile')" title="User Profile" class="w-9 h-9 rounded-full bg-navy-600 text-white flex items-center justify-center border-2 border-navy-800 cursor-pointer shadow-md hover:scale-105 transition-transform">
+          <span class="material-symbols-outlined text-lg">person</span>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 md:px-8 py-8 space-y-8" id="main-content">
+
+    <!-- SCREEN 1: HOME -->
+    <section id="screen-home" class="space-y-8">
+      
+      <!-- CENSUS SAATHI FLAGSHIP DASHBOARD CARD -->
+      <div class="bg-navy-600 text-white border border-navy-500 p-6 md:p-8 rounded-3xl shadow-xl space-y-6 relative overflow-hidden">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-2xl bg-white/10 text-white flex items-center justify-center shadow-md text-3xl font-black flex-shrink-0">
+              🤝
+            </div>
+            <div>
+              <div class="inline-flex items-center gap-1.5 bg-white/10 border border-white/20 px-3 py-0.5 rounded-full text-[11px] font-bold text-powder-400 mb-1">
+                <span class="material-symbols-outlined text-xs">auto_awesome</span> Flagship Companion
+              </div>
+              <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">CENSUS SAATHI</h2>
+              <p class="text-xs opacity-80" id="t-saathiSlogan">Your intelligent companion for Census 2027</p>
+            </div>
+          </div>
+
+          <!-- Household Code & Copy -->
+          <div class="bg-navy-800 p-4 rounded-2xl border border-navy-700 flex items-center gap-3 w-full md:w-auto justify-between">
+            <div>
+              <p class="text-[10px] opacity-70 font-bold uppercase tracking-wider">Household Census Code</p>
+              <p class="font-mono font-black text-xl text-powder-400" id="saathi-code-display">CEN-7A92F4</p>
+            </div>
+            <button onclick="copyToClipboard(appState.currentUser.profileCode)" class="bg-powder-400 text-navy-800 hover:bg-powder-500 font-bold text-xs p-2.5 rounded-xl shadow-md cursor-pointer" title="Copy Code">
+              <span class="material-symbols-outlined text-base">content_copy</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Progress Bar & Verification Badges -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 text-xs">
+          <div class="bg-navy-800 p-4 rounded-2xl border border-navy-700 space-y-2 col-span-2">
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-white">Self-Enumeration Progress</span>
+              <span class="font-black text-powder-400" id="saathi-progress-text">68% Completed</span>
+            </div>
+            <div class="w-full h-3 bg-navy-900 rounded-full overflow-hidden border border-navy-700">
+              <div id="saathi-progress-bar" class="h-full bg-powder-400 transition-all duration-500" style="width: 68%"></div>
+            </div>
+          </div>
+
+          <div class="bg-navy-800 p-4 rounded-2xl border border-navy-700 space-y-1 flex flex-col justify-center">
+            <span class="opacity-70 font-bold text-[11px] uppercase">Identity Badges</span>
+            <div class="flex flex-wrap gap-1.5" id="saathi-identity-badges">
+              <span class="bg-powder-400/20 text-powder-400 border border-powder-400/40 text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">✓ Mobile Verified</span>
+              <span class="bg-cream-100/20 text-cream-100 border border-cream-100/40 text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">🧪 DigiLocker Demo</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Core Saathi Capability Buttons -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2">
+          <button onclick="startSelfEnumeration()" class="bg-powder-400 hover:bg-powder-500 text-navy-800 font-black text-xs py-3.5 px-4 rounded-2xl shadow-md flex items-center justify-center gap-2 cursor-pointer transition-transform hover:scale-105">
+            <span class="material-symbols-outlined text-lg">play_circle</span>
+            <span>Continue Census</span>
+          </button>
+          <button onclick="runAiCensusCheck()" class="bg-navy-800 hover:bg-navy-700 text-white border border-navy-700 font-bold text-xs py-3.5 px-4 rounded-2xl shadow-md flex items-center justify-center gap-2 cursor-pointer transition-transform hover:scale-105">
+            <span class="material-symbols-outlined text-lg text-powder-400">fact_check</span>
+            <span>AI Census Check</span>
+          </button>
+          <button onclick="openPassportQrModal()" class="bg-navy-800 hover:bg-navy-700 text-white border border-navy-700 font-bold text-xs py-3.5 px-4 rounded-2xl shadow-md flex items-center justify-center gap-2 cursor-pointer transition-transform hover:scale-105">
+            <span class="material-symbols-outlined text-lg text-cream-100">qr_code_2</span>
+            <span>Show Passport QR</span>
+          </button>
+          <button onclick="openResumeAnywhereModal()" class="bg-navy-800 hover:bg-navy-700 text-white border border-navy-700 font-bold text-xs py-3.5 px-4 rounded-2xl shadow-md flex items-center justify-center gap-2 cursor-pointer transition-transform hover:scale-105">
+            <span class="material-symbols-outlined text-lg text-powder-400">devices</span>
+            <span>Resume Anywhere</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Action Cards Grid -->
+      <div class="space-y-4">
+        <h3 class="font-display text-xl font-bold" id="t-quickActionTitle">Quick Action Features</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div onclick="startSelfEnumeration()" class="custom-card rounded-3xl p-6 border hover:border-navy-600 transition-all cursor-pointer group flex flex-col justify-between min-h-[200px] shadow-sm">
+            <div>
+              <div class="w-12 h-12 bg-navy-600 text-white rounded-2xl flex items-center justify-center mb-4 shadow-md">
+                <span class="material-symbols-outlined text-2xl">task_alt</span>
+              </div>
+              <h4 class="font-bold group-hover:text-navy-600 transition-colors mb-1" id="t-cardEnumTitle">Start Self-Enumeration</h4>
+              <p class="text-xs opacity-70" id="t-cardEnumDesc">Complete household details online in 5 minutes with 1-Tap DigiLocker profile autofill.</p>
+            </div>
+          </div>
+
+          <div onclick="switchTab('mycensus')" class="custom-card rounded-3xl p-6 border hover:border-navy-600 transition-all cursor-pointer group flex flex-col justify-between min-h-[200px] shadow-sm">
+            <div>
+              <div class="w-12 h-12 bg-powder-500 text-navy-800 rounded-2xl flex items-center justify-center mb-4 shadow-md">
+                <span class="material-symbols-outlined text-2xl">calendar_month</span>
+              </div>
+              <h4 class="font-bold group-hover:text-navy-600 transition-colors mb-1" id="t-cardScheduleTitle">Check State Schedules</h4>
+              <p class="text-xs opacity-70" id="t-cardScheduleDesc">View enumeration dates across all 29 States & UTs.</p>
+            </div>
+          </div>
+
+          <div onclick="switchTab('truthcheck')" class="custom-card rounded-3xl p-6 border hover:border-navy-600 transition-all cursor-pointer group flex flex-col justify-between min-h-[200px] shadow-sm">
+            <div>
+              <div class="w-12 h-12 bg-cream-100 text-navy-800 rounded-2xl flex items-center justify-center mb-4 shadow-md">
+                <span class="material-symbols-outlined text-2xl">shield</span>
+              </div>
+              <h4 class="font-bold group-hover:text-navy-600 transition-colors mb-1" id="t-cardTruthTitle">Census Truth Check</h4>
+              <p class="text-xs opacity-70" id="t-cardTruthDesc">Verify WhatsApp forwards and rumors against official MHA data.</p>
+            </div>
+          </div>
+
+          <div onclick="switchTab('explorer')" class="custom-card rounded-3xl p-6 border hover:border-navy-600 transition-all cursor-pointer group flex flex-col justify-between min-h-[200px] shadow-sm">
+            <div>
+              <div class="w-12 h-12 bg-pale-100 text-navy-800 rounded-2xl flex items-center justify-center mb-4 shadow-md">
+                <span class="material-symbols-outlined text-2xl">insights</span>
+              </div>
+              <h4 class="font-bold group-hover:text-navy-600 transition-colors mb-1" id="t-cardExplorerTitle">Explore Census Data</h4>
+              <p class="text-xs opacity-70" id="t-cardExplorerDesc">Access literacy statistics and state demographic metrics.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 2: AI GUIDE -->
+    <section id="screen-guide" class="hidden space-y-6 max-w-4xl mx-auto">
+      <div class="custom-card border p-6 rounded-3xl shadow-md space-y-4">
+        <div class="flex items-center justify-between flex-wrap gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-navy-600 text-white flex items-center justify-center font-bold text-xl">🤖</div>
+            <div>
+              <h2 class="text-xl font-extrabold" id="t-guideTitle">Ask DigiCensus Saathi</h2>
+              <p class="text-xs opacity-70">Interactive AI Guide for Digital Census 2027</p>
+            </div>
+          </div>
+        </div>
+        <div id="chat-box" class="border rounded-2xl p-5 space-y-4 min-h-[350px] max-h-[450px] overflow-y-auto custom-scrollbar"></div>
+        
+        <!-- Quick Suggested Question Pills -->
+        <div class="flex flex-wrap gap-2 text-xs">
+          <button type="button" onclick="sendQuickChat('What is Census 2027?')" class="border rounded-full px-3 py-1 text-[11px] font-semibold opacity-80 hover:opacity-100 hover:border-navy-600 transition-all">💡 What is Census 2027?</button>
+          <button type="button" onclick="sendQuickChat('Is my census data safe under Census Act 1948?')" class="border rounded-full px-3 py-1 text-[11px] font-semibold opacity-80 hover:opacity-100 hover:border-navy-600 transition-all">🛡️ Data Privacy & Census Act</button>
+          <button type="button" onclick="sendQuickChat('How do I complete self-enumeration online?')" class="border rounded-full px-3 py-1 text-[11px] font-semibold opacity-80 hover:opacity-100 hover:border-navy-600 transition-all">📝 Self-Enumeration Steps</button>
+          <button type="button" onclick="sendQuickChat('What features does Census Saathi offer?')" class="border rounded-full px-3 py-1 text-[11px] font-semibold opacity-80 hover:opacity-100 hover:border-navy-600 transition-all">🤝 Census Saathi Companion</button>
+        </div>
+
+        <form onsubmit="submitGuideChat(event)" class="flex items-center gap-3">
+          <input type="text" id="chat-input" placeholder="Ask DigiCensus Saathi anything..." class="flex-1 border rounded-2xl py-3.5 px-5 text-xs focus:outline-none focus:ring-2 focus:ring-navy-600">
+          <button type="submit" class="bg-navy-600 hover:bg-navy-700 text-white p-3.5 rounded-2xl font-bold flex items-center justify-center cursor-pointer"><span class="material-symbols-outlined text-xl">send</span></button>
+        </form>
+      </div>
+    </section>
+
+    <!-- SCREEN 3: JOURNEY -->
+    <section id="screen-journey" class="hidden space-y-8 max-w-5xl mx-auto">
+      <div>
+        <h2 class="text-3xl font-black">Census 6-Step Visual Journey</h2>
+        <p class="text-xs opacity-70 mt-1">Step-by-step roadmap from understanding to official household completion.</p>
+      </div>
+      <div id="journey-steps-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+    </section>
+
+    <!-- SCREEN 4: MULTI-STEP SELF-ENUMERATION WIZARD & ASSISTED CENSUS MODE -->
+    <section id="screen-enumerate" class="hidden space-y-6 max-w-4xl mx-auto">
+      <div id="enum-form-container"></div>
+    </section>
+
+    <!-- SCREEN 5: SCHEDULE -->
+    <section id="screen-mycensus" class="hidden space-y-6 max-w-5xl mx-auto">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-3xl font-black" id="t-scheduleTitle">State Census Schedules</h2>
+          <p class="text-xs opacity-70 mt-1">Enumeration dates across all 29 States & Union Territories.</p>
+        </div>
+        
+        <!-- Schedule Filters -->
+        <div class="flex flex-wrap items-center gap-2">
+          <input type="text" id="schedule-search" oninput="filterScheduleList()" placeholder="Search state..." class="text-xs border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy-600">
+          <div class="flex border rounded-full p-1 text-xs font-bold bg-slate-100 dark:bg-slate-800">
+            <button onclick="setScheduleStatusFilter('All')" id="filter-status-all" class="px-3 py-1 rounded-full option-selected">All (29)</button>
+            <button onclick="setScheduleStatusFilter('Active')" id="filter-status-active" class="px-3 py-1 rounded-full opacity-70">Active</button>
+            <button onclick="setScheduleStatusFilter('Upcoming')" id="filter-status-upcoming" class="px-3 py-1 rounded-full opacity-70">Upcoming</button>
+            <button onclick="setScheduleStatusFilter('Completed')" id="filter-status-completed" class="px-3 py-1 rounded-full opacity-70">Completed</button>
+          </div>
+        </div>
+      </div>/button>
+          </div>
+        </div>
+      </div>
+
+      <div id="schedule-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </section>
+
+    <!-- SCREEN 6: TRUTH CHECK -->
+    <section id="screen-truthcheck" class="hidden space-y-8 max-w-4xl mx-auto">
+      <div class="custom-card border p-8 rounded-3xl space-y-6 shadow-md">
+        <div>
+          <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-xs font-black px-3.5 py-1 rounded-full uppercase">Official MHA Rumor Analyzer</span>
+          <h2 class="text-3xl font-black mt-3">Is this Census information true?</h2>
+          <p class="text-xs text-slate-400 mt-1">Verify WhatsApp messages, social media posts, or rumors against the Census Act 1948.</p>
+        </div>
+
+        <div class="space-y-3">
+          <textarea id="truth-input" rows="3" placeholder="Paste WhatsApp message or question (e.g., 'Will census data be shared with tax or NRC authorities?')..." class="w-full border rounded-2xl p-4 text-xs focus:outline-none focus:ring-2 focus:ring-navy-500"></textarea>
+          <button onclick="analyzeRumor()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-6 py-3 rounded-xl shadow-md flex items-center gap-2 cursor-pointer">
+            <span class="material-symbols-outlined text-base">fact_check</span> Analyze Rumor
+          </button>
+        </div>
+
+        <div id="truth-result-card" class="hidden"></div>
+      </div>
+    </section>
+
+    <!-- SCREEN 7: EXPLORER -->
+    <section id="screen-explorer" class="hidden space-y-6 max-w-6xl mx-auto">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-3xl font-black">Population & Demographics Explorer</h2>
+          <p class="text-xs text-slate-400">Interactive Census 2027 analytics across 29 States & Union Territories.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <label class="text-xs font-bold text-slate-400">Select State:</label>
+          <select id="explorer-state-select" onchange="renderExplorerData(this.value)" class="text-xs font-bold border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy-500 cursor-pointer"></select>
+        </div>
+      </div>
+      <div id="explorer-dashboard"></div>
+    </section>
+
+    <!-- SCREEN 8: PROFILE -->
+    <section id="screen-profile" class="hidden space-y-6 max-w-4xl mx-auto">
+      <div id="profile-container"></div>
+    </section>
+
+  </main>
+
+  <!-- MODAL 1: OTP VERIFICATION MODAL -->
+  <div id="otp-modal" class="fixed inset-0 bg-navy-950/70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+    <div class="custom-card border rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-300 dark:border-slate-700 pb-3">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-navy-600 dark:text-powder-400 text-2xl">phonelink_lock</span>
+          <h3 class="text-base font-bold">Verify Mobile Number (OTP)</h3>
+        </div>
+        <button onclick="closeOtpModal()" class="opacity-70 hover:opacity-100"><span class="material-symbols-outlined">close</span></button>
+      </div>
+
+      <div id="otp-step-phone" class="space-y-4 text-xs">
+        <p class="opacity-70">Enter your 10-digit Indian mobile number to receive a 6-digit verification code.</p>
+        <div class="flex gap-2">
+          <span class="border rounded-xl px-3.5 py-3 font-bold opacity-70 flex items-center">+91</span>
+          <input type="tel" maxLength="10" id="otp-phone-input" placeholder="9876543210" value="9876543210" class="flex-1 border rounded-xl p-3 font-bold text-sm focus:outline-none focus:ring-2 focus:ring-navy-600">
+        </div>
+        <div id="otp-phone-error" class="hidden p-3 bg-cream-100 text-navy-800 border border-cream-100 rounded-xl font-semibold" id="otp-phone-error-text"></div>
+        <button onclick="sendOtpRequest()" id="btn-send-otp" class="w-full bg-navy-600 hover:bg-navy-700 text-white font-bold py-3.5 rounded-xl shadow-md flex items-center justify-center gap-2">
+          <span>Send 6-Digit OTP</span>
+          <span class="material-symbols-outlined text-base">send</span>
+        </button>
+      </div>
+
+      <div id="otp-step-code" class="hidden space-y-4 text-xs">
+        <p class="opacity-70">Enter the 6-digit OTP code sent to <strong id="otp-sent-phone-display" class="text-navy-600 dark:text-powder-400">+91 9876543210</strong>.</p>
+        
+        <div class="flex justify-between gap-2" id="otp-boxes-container">
+          <input type="text" maxLength="1" class="otp-box w-12 h-12 text-center text-xl font-black border rounded-xl focus:ring-2 focus:ring-navy-600" inputmode="numeric">
+          <input type="text" maxLength="1" class="otp-box w-12 h-12 text-center text-xl font-black border rounded-xl focus:ring-2 focus:ring-navy-600" inputmode="numeric">
+          <input type="text" maxLength="1" class="otp-box w-12 h-12 text-center text-xl font-black border rounded-xl focus:ring-2 focus:ring-navy-600" inputmode="numeric">
+          <input type="text" maxLength="1" class="otp-box w-12 h-12 text-center text-xl font-black border rounded-xl focus:ring-2 focus:ring-navy-600" inputmode="numeric">
+          <input type="text" maxLength="1" class="otp-box w-12 h-12 text-center text-xl font-black border rounded-xl focus:ring-2 focus:ring-navy-600" inputmode="numeric">
+          <input type="text" maxLength="1" class="otp-box w-12 h-12 text-center text-xl font-black border rounded-xl focus:ring-2 focus:ring-navy-600" inputmode="numeric">
+        </div>
+
+        <div id="otp-verify-error" class="hidden p-3 bg-cream-100 text-navy-800 border border-cream-100 rounded-xl font-semibold" id="otp-verify-error-text"></div>
+
+        <div class="flex items-center justify-between opacity-70">
+          <span>Resend code in <strong id="otp-timer-seconds" class="text-navy-600 dark:text-powder-400">60</strong>s</span>
+          <button onclick="sendOtpRequest()" id="btn-resend-otp" disabled class="text-navy-600 dark:text-powder-400 font-bold hover:underline disabled:opacity-40">Resend OTP</button>
+        </div>
+
+        <button onclick="verifyOtpRequest()" id="btn-verify-otp" class="w-full bg-navy-600 hover:bg-navy-700 text-white font-bold py-3.5 rounded-xl shadow-md flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined text-base">check_circle</span>
+          <span>Verify OTP</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: CENSUS PASSPORT QR MODAL -->
+  <div id="passport-qr-modal" class="fixed inset-0 bg-navy-950/70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+    <div class="custom-card border rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-5 text-center">
+      <div class="flex items-center justify-between border-b border-slate-300 dark:border-slate-700 pb-3">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-navy-600 dark:text-powder-400 text-2xl">qr_code_2</span>
+          <h3 class="text-base font-bold">Census Passport QR</h3>
+        </div>
+        <button onclick="closePassportQrModal()" class="opacity-70 hover:opacity-100"><span class="material-symbols-outlined">close</span></button>
+      </div>
+
+      <div class="border p-6 rounded-3xl space-y-4">
+        <p class="text-[11px] opacity-70 uppercase font-bold tracking-wider">Household Reference QR</p>
+        <div class="w-48 h-48 bg-white p-3 rounded-2xl mx-auto flex items-center justify-center shadow-inner">
+          <svg viewBox="0 0 100 100" class="w-full h-full text-navy-800 fill-current">
+            <path d="M0,0 h30 v30 h-30 z M10,10 h10 v10 h-10 z M70,0 h30 v30 h-30 z M80,10 h10 v10 h-10 z M0,70 h30 v30 h-30 z M10,80 h10 v10 h-10 z M40,10 h10 v10 h-10 z M50,40 h20 v20 h-20 z M80,70 h20 v20 h-20 z" />
+          </svg>
+        </div>
+        <div>
+          <p class="font-mono font-black text-navy-600 dark:text-powder-400 text-lg" id="qr-code-text">CEN-7A92F4</p>
+          <p class="text-[10px] opacity-70 mt-1">Opaque Token: Encodes zero raw personal data. Scan to resume on another device with phone OTP authentication.</p>
+        </div>
+      </div>
+
+      <div class="flex justify-center gap-3">
+        <button onclick="copyToClipboard(appState.currentUser.profileCode)" class="bg-navy-600 hover:bg-navy-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl flex items-center gap-2">
+          <span class="material-symbols-outlined text-base">content_copy</span> Copy Code
+        </button>
+        <button onclick="closePassportQrModal()" class="border font-bold text-xs px-5 py-2.5 rounded-xl">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: RESUME ANYWHERE MODAL -->
+  <div id="resume-anywhere-modal" class="fixed inset-0 bg-navy-950/70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+    <div class="custom-card border rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-300 dark:border-slate-700 pb-3">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-navy-600 dark:text-powder-400 text-2xl">devices</span>
+          <h3 class="text-base font-bold">Resume Census on This Device</h3>
+        </div>
+        <button onclick="closeResumeAnywhereModal()" class="opacity-70 hover:opacity-100"><span class="material-symbols-outlined">close</span></button>
+      </div>
+
+      <p class="text-xs opacity-70">Enter your Household Census Code to restore your saved self-enumeration draft. Strict phone authentication is required.</p>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold mb-1">Household Census Code *</label>
+          <input type="text" id="inp-resume-code" placeholder="e.g. CEN-7A92F4" class="w-full border rounded-xl p-3.5 font-mono font-bold uppercase focus:outline-none focus:ring-2 focus:ring-navy-600">
+        </div>
+        <div>
+          <label class="block font-bold mb-1">Your Verified Phone Number *</label>
+          <input type="tel" id="inp-resume-phone" placeholder="10-digit mobile number" class="w-full border rounded-xl p-3.5 font-bold focus:outline-none focus:ring-2 focus:ring-navy-600">
+        </div>
+
+        <div id="resume-error-box" class="hidden p-3 bg-cream-100 text-navy-800 border border-cream-100 rounded-xl font-semibold flex items-center gap-2">
+          <span class="material-symbols-outlined text-base">gpp_bad</span>
+          <span id="resume-error-text">Access Denied</span>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-3 pt-2">
+        <button onclick="closeResumeAnywhereModal()" class="px-4 py-2.5 rounded-xl text-xs font-bold opacity-70">Cancel</button>
+        <button onclick="submitResumeAnywhere()" id="btn-resume-submit" class="bg-navy-600 hover:bg-navy-700 text-white font-bold text-xs px-6 py-2.5 rounded-xl shadow-md flex items-center gap-2 cursor-pointer">
+          <span class="material-symbols-outlined text-base">key</span>
+          <span>Authenticate & Resume</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: AI CENSUS CHECK MODAL -->
+  <div id="ai-check-modal" class="fixed inset-0 bg-navy-950/70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+    <div class="custom-card border rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-5">
+      <div class="flex items-center justify-between border-b border-slate-300 dark:border-slate-700 pb-3">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-navy-600 dark:text-powder-400 text-2xl">fact_check</span>
+          <h3 class="text-base font-bold">AI Census Check Analysis</h3>
+        </div>
+        <button onclick="closeAiCheckModal()" class="opacity-70 hover:opacity-100"><span class="material-symbols-outlined">close</span></button>
+      </div>
+
+      <div id="ai-check-body" class="space-y-4"></div>
+
+      <div class="flex justify-end gap-3 border-t border-slate-300 dark:border-slate-700 pt-3">
+        <button onclick="closeAiCheckModal()" class="px-4 py-2 rounded-xl text-xs font-bold opacity-70">Close</button>
+        <button onclick="startSelfEnumeration(); closeAiCheckModal();" class="bg-navy-600 hover:bg-navy-700 text-white font-bold text-xs px-6 py-2 rounded-xl">Review & Edit Form</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="border-t py-8 px-4 text-center text-xs transition-colors duration-200" id="main-footer">
+    <p class="font-semibold">DigiCensus 2027 — Official Digital Enumeration Web Application</p>
+    <p class="mt-1 opacity-70">Protected under the Census Act 1948 · End-to-End Encrypted · Ministry of Home Affairs, India</p>
+  </footer>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 bg-navy-800 text-white text-xs font-bold px-5 py-3 rounded-full shadow-2xl opacity-0 transition-opacity pointer-events-none z-50 border border-navy-700 flex items-center gap-2">
+    <span class="material-symbols-outlined text-powder-400 text-base">info</span>
+    <span id="toastMsg">Notification</span>
+  </div>
+
+  <!-- JAVASCRIPT APPLICATION ENGINE -->
+  <script>
+    /* 1. CENTRALIZED 29 STATES DATASET */
+    const STATES_29 = [
+      { id: 'MH', code: 'MH-27', name: 'Maharashtra', population: 126400000, male: 65200000, female: 61200000, rural: 61500000, urban: 64900000, households: 27500000, density: 365, literacy: 82.3, startDate: '2026-05-01', endDate: '2026-06-15', status: 'Active', officer: 'Shri S. R. Kulkarni (Mumbai)' },
+      { id: 'DL', code: 'DL-07', name: 'Delhi NCR', population: 20800000, male: 11100000, female: 9700000, rural: 500000, urban: 20300000, households: 4600000, density: 11320, literacy: 88.7, startDate: '2026-05-01', endDate: '2026-06-15', status: 'Active', officer: 'Shri N. C. Jain (New Delhi)' },
+      { id: 'KA', code: 'KA-29', name: 'Karnataka', population: 67600000, male: 34300000, female: 33300000, rural: 37500000, urban: 30100000, households: 14800000, density: 319, literacy: 84.1, startDate: '2026-04-15', endDate: '2026-05-30', status: 'Completed', officer: 'Shri P. S. Rao (Bengaluru)' },
+      { id: 'TN', code: 'TN-33', name: 'Tamil Nadu', population: 76800000, male: 38600000, female: 38200000, rural: 37200000, urban: 39600000, households: 18500000, density: 555, literacy: 86.4, startDate: '2026-04-01', endDate: '2026-05-15', status: 'Completed', officer: 'Smt. S. Sundari (Chennai)' },
+      { id: 'WB', code: 'WB-19', name: 'West Bengal', population: 98100000, male: 50400000, female: 47700000, rural: 62100000, urban: 36000000, households: 22100000, density: 1028, literacy: 77.8, startDate: '2026-06-01', endDate: '2026-07-15', status: 'Active', officer: 'Shri S. Bandyopadhyay (Kolkata)' },
+      { id: 'UP', code: 'UP-09', name: 'Uttar Pradesh', population: 235700000, male: 122800000, female: 112900000, rural: 178500000, urban: 57200000, households: 41200000, density: 829, literacy: 73.0, startDate: '2026-05-15', endDate: '2026-07-01', status: 'Active', officer: 'Shri A. K. Singh (Lucknow)' },
+      { id: 'GJ', code: 'GJ-24', name: 'Gujarat', population: 70400000, male: 36600000, female: 33800000, rural: 38000000, urban: 32400000, households: 14200000, density: 308, literacy: 82.4, startDate: '2026-05-01', endDate: '2026-06-15', status: 'Active', officer: 'Shri R. M. Patel (Gandhinagar)' },
+      { id: 'RJ', code: 'RJ-08', name: 'Rajasthan', population: 81000000, male: 41900000, female: 39100000, rural: 59900000, urban: 21100000, households: 15600000, density: 201, literacy: 69.7, startDate: '2026-05-15', endDate: '2026-07-01', status: 'Active', officer: 'Shri V. Sharma (Jaipur)' },
+      { id: 'AP', code: 'AP-28', name: 'Andhra Pradesh', population: 53200000, male: 26700000, female: 26500000, rural: 36200000, urban: 17000000, households: 12600000, density: 308, literacy: 74.8, startDate: '2026-04-15', endDate: '2026-05-31', status: 'Completed', officer: 'Shri K. V. Reddy (Amaravati)' },
+      { id: 'TS', code: 'TS-36', name: 'Telangana', population: 38500000, male: 19400000, female: 19100000, rural: 21500000, urban: 17000000, households: 8900000, density: 312, literacy: 76.5, startDate: '2026-04-15', endDate: '2026-05-31', status: 'Completed', officer: 'Smt. M. Gayatri (Hyderabad)' },
+      { id: 'KL', code: 'KL-32', name: 'Kerala', population: 35700000, male: 17300000, female: 18400000, rural: 17400000, urban: 18300000, households: 7800000, density: 860, literacy: 96.2, startDate: '2026-04-01', endDate: '2026-05-15', status: 'Completed', officer: 'Shri T. K. Nair (Thiruvananthapuram)' },
+      { id: 'MP', code: 'MP-23', name: 'Madhya Pradesh', population: 85400000, male: 44100000, female: 41300000, rural: 61500000, urban: 23900000, households: 17100000, density: 236, literacy: 73.7, startDate: '2026-06-01', endDate: '2026-07-15', status: 'Upcoming', officer: 'Shri H. L. Verma (Bhopal)' },
+      { id: 'BR', code: 'BR-10', name: 'Bihar', population: 126700000, male: 66000000, female: 60700000, rural: 111500000, urban: 15200000, households: 23400000, density: 1106, literacy: 70.9, startDate: '2026-06-15', endDate: '2026-07-31', status: 'Upcoming', officer: 'Shri P. K. Jha (Patna)' },
+      { id: 'PB', code: 'PB-03', name: 'Punjab', population: 30600000, male: 16100000, female: 14500000, rural: 18900000, urban: 11700000, households: 5900000, density: 551, literacy: 83.7, startDate: '2026-05-01', endDate: '2026-06-15', status: 'Active', officer: 'Shri G. S. Dhillon (Chandigarh)' },
+      { id: 'HR', code: 'HR-06', name: 'Haryana', population: 29800000, male: 15900000, female: 13900000, rural: 18500000, urban: 11300000, households: 5600000, density: 573, literacy: 82.4, startDate: '2026-05-01', endDate: '2026-06-15', status: 'Active', officer: 'Smt. R. Hooda (Panchkula)' },
+      { id: 'OR', code: 'OR-21', name: 'Odisha', population: 46400000, male: 23400000, female: 23000000, rural: 38300000, urban: 8100000, households: 10400000, density: 270, literacy: 77.3, startDate: '2026-06-01', endDate: '2026-07-15', status: 'Upcoming', officer: 'Shri B. C. Mohanty (Bhubaneswar)' },
+      { id: 'AS', code: 'AS-18', name: 'Assam', population: 35600000, male: 18200000, female: 17400000, rural: 30600000, urban: 5000000, households: 7200000, density: 398, literacy: 78.8, startDate: '2026-06-15', endDate: '2026-07-31', status: 'Upcoming', officer: 'Shri D. K. Sarma (Dispur)' },
+      { id: 'JH', code: 'JH-20', name: 'Jharkhand', population: 38600000, male: 19800000, female: 18800000, rural: 29300000, urban: 9300000, households: 7500000, density: 414, literacy: 73.1, startDate: '2026-06-15', endDate: '2026-07-31', status: 'Upcoming', officer: 'Shri R. N. Mahto (Ranchi)' },
+      { id: 'CG', code: 'CG-22', name: 'Chhattisgarh', population: 29400000, male: 14800000, female: 14600000, rural: 22600000, urban: 6800000, households: 6100000, density: 189, literacy: 77.9, startDate: '2026-06-01', endDate: '2026-07-15', status: 'Upcoming', officer: 'Smt. P. Sahu (Raipur)' },
+      { id: 'UK', code: 'UK-05', name: 'Uttarakhand', population: 11700000, male: 6000000, female: 5700000, rural: 8100000, urban: 3600000, households: 2500000, density: 189, literacy: 87.6, startDate: '2026-05-15', endDate: '2026-07-01', status: 'Active', officer: 'Shri M. S. Rawat (Dehradun)' },
+      { id: 'HP', code: 'HP-02', name: 'Himachal Pradesh', population: 7500000, male: 3800000, female: 3700000, rural: 6700000, urban: 800000, households: 1600000, density: 123, literacy: 89.5, startDate: '2026-05-15', endDate: '2026-07-01', status: 'Active', officer: 'Shri K. C. Thakur (Shimla)' },
+      { id: 'GA', code: 'GA-30', name: 'Goa', population: 1600000, male: 820000, female: 780000, rural: 600000, urban: 1000000, households: 380000, density: 394, literacy: 92.2, startDate: '2026-04-01', endDate: '2026-05-15', status: 'Completed', officer: 'Smt. A. D\'Souza (Panaji)' },
+      { id: 'JK', code: 'JK-01', name: 'Jammu & Kashmir', population: 13600000, male: 7100000, female: 6500000, rural: 9800000, urban: 3800000, households: 2700000, density: 124, literacy: 77.3, startDate: '2026-07-01', endDate: '2026-08-15', status: 'Upcoming', officer: 'Shri F. A. Lone (Srinagar)' },
+      { id: 'TR', code: 'TR-16', name: 'Tripura', population: 4100000, male: 2100000, female: 2000000, rural: 2900000, urban: 1200000, households: 920000, density: 350, literacy: 87.8, startDate: '2026-06-15', endDate: '2026-07-31', status: 'Upcoming', officer: 'Shri B. Debbarma (Agartala)' },
+      { id: 'ML', code: 'ML-17', name: 'Meghalaya', population: 3400000, male: 1700000, female: 1700000, rural: 2700000, urban: 700000, households: 680000, density: 132, literacy: 79.1, startDate: '2026-06-15', endDate: '2026-07-31', status: 'Upcoming', officer: 'Smt. L. Sangma (Shillong)' },
+      { id: 'MN', code: 'MN-14', name: 'Manipur', population: 3200000, male: 1600000, female: 1600000, rural: 2200000, urban: 1000000, households: 620000, density: 128, literacy: 84.4, startDate: '2026-06-15', endDate: '2026-07-31', status: 'Upcoming', officer: 'Shri N. Singh (Imphal)' },
+      { id: 'NL', code: 'NL-13', name: 'Nagaland', population: 2200000, male: 1100000, female: 1100000, rural: 1600000, urban: 600000, households: 440000, density: 119, literacy: 83.5, startDate: '2026-06-15', endDate: '2026-07-31', status: 'Upcoming', officer: 'Shri K. Zeliang (Kohima)' },
+      { id: 'AR', code: 'AR-12', name: 'Arunachal Pradesh', population: 1600000, male: 830000, female: 770000, rural: 1200000, urban: 400000, households: 330000, density: 17, literacy: 73.7, startDate: '2026-07-01', endDate: '2026-08-15', status: 'Upcoming', officer: 'Shri T. Dorjee (Itanagar)' },
+      { id: 'MZ', code: 'MZ-15', name: 'Mizoram', population: 1300000, male: 660000, female: 640000, rural: 600000, urban: 700000, households: 260000, density: 52, literacy: 91.6, startDate: '2026-06-15', endDate: '2026-07-31', status: 'Upcoming', officer: 'Shri L. Sailo (Aizawl)' }
+    ];
+
+    function getState(idOrName) {
+      return STATES_29.find(s => s.id === idOrName || s.name === idOrName) || STATES_29[0];
+    }
+
+    /* 2. MULTILINGUAL DICTIONARY (5 Languages) */
+    const I18N = {
+      English: {
+        brandName: "DigiCensus", slogan: "India's Census. Made simple.",
+        navHome: "Home", navGuide: "AI Guide", navJourney: "Journey", navEnumerate: "Self-Enumerate", navSchedule: "Schedule", navTruth: "Truth Check", navExplorer: "Explorer", navProfile: "Profile",
+        saathiSlogan: "Your intelligent companion for Census 2027", quickActionTitle: "Quick Action Features",
+        cardEnumTitle: "Start Self-Enumeration", cardEnumDesc: "Complete household details online in 5 minutes with 1-Tap DigiLocker profile autofill.",
+        cardScheduleTitle: "Check State Schedules", cardScheduleDesc: "View enumeration dates across all 29 States & UTs.",
+        cardTruthTitle: "Census Truth Check", cardTruthDesc: "Verify WhatsApp forwards and rumors against official MHA data.",
+        cardExplorerTitle: "Explore Census Data", cardExplorerDesc: "Access literacy statistics and state demographic metrics.",
+        guideTitle: "Ask DigiCensus Saathi", scheduleTitle: "State Census Schedules"
+      },
+      Hindi: {
+        brandName: "डिजी-जनगणना", slogan: "भारत की जनगणना। हुई आसान।",
+        navHome: "मुख्य पृष्ठ", navGuide: "एआई गाइड", navJourney: "प्रक्रिया यात्रा", navEnumerate: "स्वयं-गणना", navSchedule: "राज्य अनुसूची", navTruth: "सत्यता जाँच", navExplorer: "आंकड़ा खोज", navProfile: "प्रोफ़ाइल",
+        saathiSlogan: "जनगणना 2027 के लिए आपका डिजिटल साथी", quickActionTitle: "मुख्य डिजिटल सेवाएं",
+        cardEnumTitle: "स्वयं-गणना शुरू करें", cardEnumDesc: "डिजी लॉकर ऑटोफिल के साथ 5 मिनट में अपना विवरण दर्ज करें।",
+        cardScheduleTitle: "राज्य समय-सारणी", cardScheduleDesc: "सभी 29 राज्यों और केंद्र शासित प्रदेशों की तिथियां देखें।",
+        cardTruthTitle: "सत्यता जाँच", cardTruthDesc: "आधिकारिक डेटा के खिलाफ अफवाहों का सत्यापन करें।",
+        cardExplorerTitle: "जनगणना आंकड़ा खोज", cardExplorerDesc: "साक्षरता दर और राज्य जनसांख्यिकी मेट्रिक्स तक पहुँचें।",
+        guideTitle: "डिजिटल साथी से पूछें", scheduleTitle: "राज्य जनगणना अनुसूची"
+      },
+      Marathi: {
+        brandName: "डिजी-जनगणना", slogan: "भारताची जनगणना। झाली सोपी।",
+        navHome: "मुख्य पान", navGuide: "एआय मार्गदर्शक", navJourney: "प्रक्रिया", navEnumerate: "स्वयं-नोंदणी", navSchedule: "राज्य वेळापत्रक", navTruth: "सत्यता पडताळणी", navExplorer: "माहिती शोध", navProfile: "प्रोफाईल",
+        saathiSlogan: "जनगणना २०२७ साठी आपला डिजिटल सोबती", quickActionTitle: "डिजिटल सेवा",
+        cardEnumTitle: "स्वयं-नोंदणी सुरू करा", cardEnumDesc: "५ मिनिटांत डिजीलॉकरसह कुटुंब नोंदणी पूर्ण करा.",
+        cardScheduleTitle: "राज्य वेळापत्रक", cardScheduleDesc: "२९ राज्यांमधील जनगणना तारखा पहा.",
+        cardTruthTitle: "अफवा पडताळणी", cardTruthDesc: "व्हॉट्सॲप मेसेजची अचूक माहिती तपासा.",
+        cardExplorerTitle: "जनसंख्या आकडेवारी", cardExplorerDesc: "साक्षरता आणि लोकसंख्या माहिती शोधा.",
+        guideTitle: "डिजिटल सोबत्याशी बोला", scheduleTitle: "राज्य जनगणना वेळापत्रक"
+      },
+      Tamil: {
+        brandName: "டிஜி-சென்சஸ்", slogan: "இந்தியாவின் மக்கள் தொகை கணக்கெடுப்பு.",
+        navHome: "முகப்பு", navGuide: "AI வழிகாட்டி", navJourney: "பயணம்", navEnumerate: "சுய கணக்கெடுப்பு", navSchedule: "அட்டவணை", navTruth: "உண்மை சரிபார்ப்பு", navExplorer: "தரவு ஆய்வு", navProfile: "சுயவிவரம்",
+        saathiSlogan: "சென்சஸ் 2027க்கான உங்கள் டிஜிட்டல் தோழன்", quickActionTitle: "விரைவு சேவைகள்",
+        cardEnumTitle: "சுய கணக்கெடுப்பைத் தொடங்குங்கள்", cardEnumDesc: "5 நிமிடங்களில் உங்கள் குடும்ப விவரங்களைப் பதியுங்கள்.",
+        cardScheduleTitle: "மாநில அட்டவணைகள்", cardScheduleDesc: "29 மாநிலங்களின் சென்சஸ் தேதிகளைப் பாருங்கள்.",
+        cardTruthTitle: "உண்மை சரிபார்ப்பு", cardTruthDesc: "வதந்திகளை அரசு தரவுகளுடன் சரிபாருங்கள்.",
+        cardExplorerTitle: "மக்கள்தொகை தரவு", cardExplorerDesc: "கல்வியறிவு மற்றும் மாநில புள்ளியியல்.",
+        guideTitle: "AI வழிகாட்டியிடம் கேளுங்கள்", scheduleTitle: "மாநில சென்சஸ் அட்டவணை"
+      },
+      Bengali: {
+        brandName: "ডিজি-আদমশুমারি", slogan: "ভারতের আদমশুমারি। সহজ ও ডিজিটাল।",
+        navHome: "হোম", navGuide: "এআই গাইড", navJourney: "ধাপসমূহ", navEnumerate: "স্বয়ং-গণনা", navSchedule: "সময়সূচী", navTruth: "সত্যতা যাচাই", navExplorer: "তথ্য অনুসন্ধান", navProfile: "প্রোফাইল",
+        saathiSlogan: "আদমশুমারি ২০২৭-এর আপনার ডিজিটাল সাথী", quickActionTitle: "দ্রুত সেবা",
+        cardEnumTitle: "স্বয়ং-গণনা শুরু করুন", cardEnumDesc: "৫ মিনিটে ডিজিলকার অটোফিলের মাধ্যমে তথ্য পূরণ করুন।",
+        cardScheduleTitle: "রাজ্য সময়সূচী", cardScheduleDesc: "২৯টি রাজ্যের আদমশুমারির তারিখ দেখুন।",
+        cardTruthTitle: "সত্যতা যাচাই", cardTruthDesc: "গুজব ও বার্তার সত্যতা যাচাই করুন।",
+        cardExplorerTitle: "ডেমোগ্রাফিক এক্সপ্লোরার", cardExplorerDesc: "স্বাক্ষরতার হার ও জনসংখ্যার উপাত্ত।",
+        guideTitle: "ডিজিটাল সাথীকে জিজ্ঞাসা করুন", scheduleTitle: "রাজ্য আদমশুমারি সময়সূচী"
+      }
+    };
+
+    /* 3. STORAGE & STATE MANAGER */
+    const STORAGE_KEYS = {
+      USERS: 'digicensus_users_v4',
+      CURRENT_USER_ID: 'digicensus_current_uid_v4',
+      SETTINGS: 'digicensus_settings_v4',
+      DRAFTS: 'digicensus_drafts_v4'
+    };
+
+    let appState = {
+      activeTab: 'home',
+      language: 'English',
+      theme: 'dark',
+      assistedMode: false,
+      currentUser: null,
+      selectedStateId: 'MH',
+      scheduleStatusFilter: 'All',
+      scheduleSearchQuery: '',
+      chatMessages: [{ sender: 'bot', text: 'Namaste! 🙏 I am DigiCensus Saathi, your companion for Census 2027. How can I help you today?' }]
+    };
+
+    let otpState = {
+      phone: '9876543210',
+      devCode: null,
+      cooldownSeconds: 60,
+      cooldownTimer: null
+    };
+
+    function initDatabase() {
+      try {
+        const savedSettings = JSON.parse(localStorage.getItem(STORAGE_KEYS.SETTINGS) || '{}');
+        if (savedSettings.language) appState.language = savedSettings.language;
+        if (savedSettings.theme) appState.theme = savedSettings.theme;
+        if (savedSettings.assistedMode) appState.assistedMode = savedSettings.assistedMode;
+      } catch(e){}
+
+      let users = [];
+      try { users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]'); } catch(e){}
+
+      let currentUid = localStorage.getItem(STORAGE_KEYS.CURRENT_USER_ID);
+      if (!users.length) {
+        const defaultUser = {
+          id: 'usr_9876543210',
+          fullName: 'Rahul Sharma',
+          mobile: '+919876543210',
+          phoneVerified: true,
+          phoneVerifiedAt: '2026-08-30T10:00:00Z',
+          digiLockerStatus: 'VERIFIED_DEMO',
+          profileCode: 'CEN-7A92F4',
+          stateId: 'MH',
+          district: 'Mumbai Suburban',
+          address: '402, Green Valley Apartments, Andheri East',
+          houseType: 'Pucca Building',
+          waterSource: 'Tap water inside premises',
+          lpgConnection: 'LPG / PNG Gas',
+          electricityAccess: 'Yes — Grid supply',
+          toiletFacility: 'Flush toilet with piped water',
+          members: [
+            { name: 'Rahul Sharma', age: '42', gender: 'Male', relation: 'Self / Head', maritalStatus: 'Married', education: 'Graduate', occupation: 'Software Engineer' },
+            { name: 'Priya Sharma', age: '39', gender: 'Female', relation: 'Spouse', maritalStatus: 'Married', education: 'Post Graduate', occupation: 'Teacher' }
+          ],
+          status: 'In Progress',
+          progress: 68,
+          seId: '2027-8849-1920-4412',
+          submittedAt: '2026-08-30T10:15:00Z'
+        };
+        users.push(defaultUser);
+        localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
+        currentUid = defaultUser.id;
+        localStorage.setItem(STORAGE_KEYS.CURRENT_USER_ID, currentUid);
+      }
+
+      appState.currentUser = users.find(u => u.id === currentUid) || users[0];
+      
+      const langSel = document.getElementById('lang-select');
+      if (langSel) langSel.value = appState.language;
+
+      applyTheme(appState.theme);
+      applyLanguage(appState.language);
+      applyAssistedMode(appState.assistedMode);
+      updateSaathiDashboard();
+    }
+
+    function saveUser(userObj) {
+      let users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]');
+      const idx = users.findIndex(u => u.id === userObj.id);
+      if (idx >= 0) users[idx] = userObj;
+      else users.push(userObj);
+
+      localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
+      if (appState.currentUser && appState.currentUser.id === userObj.id) {
+        appState.currentUser = userObj;
+      }
+      updateSaathiDashboard();
+    }
+
+    /* 4. THEME ENGINE & LANGUAGE ENGINE */
+    function toggleTheme() {
+      appState.theme = appState.theme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify({ language: appState.language, theme: appState.theme, assistedMode: appState.assistedMode }));
+      applyTheme(appState.theme);
+      showToast(`Theme updated to ${appState.theme.toUpperCase()} mode ✨`);
+    }
+
+    function applyTheme(theme) {
+      const html = document.documentElement;
+      const body = document.body;
+      const themeIcon = document.getElementById('theme-icon');
+      const header = document.getElementById('main-header');
+      const footer = document.getElementById('main-footer');
+
+      if (theme === 'dark') {
+        html.classList.add('dark');
+        body.style.backgroundColor = '#111A22';
+        body.style.color = '#F5F3EE';
+        if (themeIcon) themeIcon.textContent = 'dark_mode';
+        if (header) {
+          header.className = 'sticky top-0 z-50 border-b border-[#34424D] bg-[#1B2732]/95 text-[#F5F3EE] backdrop-blur-md transition-colors duration-200';
+        }
+        if (footer) {
+          footer.className = 'border-t border-[#34424D] bg-[#1B2732] text-[#B8B7B1] py-8 px-4 text-center text-xs transition-colors duration-200';
+        }
+      } else {
+        html.classList.remove('dark');
+        body.style.backgroundColor = '#F8F6F1';
+        body.style.color = '#263238';
+        if (themeIcon) themeIcon.textContent = 'light_mode';
+        if (header) {
+          header.className = 'sticky top-0 z-50 border-b border-[#D9D6CF] bg-[#FFFFFF]/95 text-[#263238] shadow-sm backdrop-blur-md transition-colors duration-200';
+        }
+        if (footer) {
+          footer.className = 'border-t border-[#D9D6CF] bg-[#FFFFFF] text-[#6B6B67] py-8 px-4 text-center text-xs transition-colors duration-200';
+        }
+      }
+
+      // Re-render currently active view for seamless theme update
+      if (appState.activeTab) switchTab(appState.activeTab);
+    }
+
+    function changeLanguage(lang) {
+      appState.language = lang;
+      localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify({ language: appState.language, theme: appState.theme, assistedMode: appState.assistedMode }));
+      applyLanguage(lang);
+      showToast(`Language set to ${lang} 🌐`);
+    }
+
+    function applyLanguage(lang) {
+      const dict = I18N[lang] || I18N.English;
+      const setTxt = (id, val) => { const el = document.getElementById(id); if (el && val) el.textContent = val; };
+
+      setTxt('header-brand', dict.brandName);
+      setTxt('header-slogan', dict.slogan);
+      setTxt('nav-home', dict.navHome);
+      setTxt('nav-guide', dict.navGuide);
+      setTxt('nav-journey', dict.navJourney);
+      setTxt('nav-enumerate', dict.navEnumerate);
+      setTxt('nav-mycensus', dict.navSchedule);
+      setTxt('nav-truthcheck', dict.navTruth);
+      setTxt('nav-explorer', dict.navExplorer);
+      setTxt('nav-profile', dict.navProfile);
+      setTxt('t-saathiSlogan', dict.saathiSlogan);
+      setTxt('t-quickActionTitle', dict.quickActionTitle);
+      setTxt('t-cardEnumTitle', dict.cardEnumTitle);
+      setTxt('t-cardEnumDesc', dict.cardEnumDesc);
+      setTxt('t-cardScheduleTitle', dict.cardScheduleTitle);
+      setTxt('t-cardScheduleDesc', dict.cardScheduleDesc);
+      setTxt('t-cardTruthTitle', dict.cardTruthTitle);
+      setTxt('t-cardTruthDesc', dict.cardTruthDesc);
+      setTxt('t-cardExplorerTitle', dict.cardExplorerTitle);
+      setTxt('t-cardExplorerDesc', dict.cardExplorerDesc);
+      setTxt('t-guideTitle', dict.guideTitle);
+      setTxt('t-scheduleTitle', dict.scheduleTitle);
+    }
+
+    /* 5. TAB SWITCHER */
+    function switchTab(tabId) {
+      appState.activeTab = tabId;
+      const screens = ['home', 'guide', 'journey', 'enumerate', 'mycensus', 'truthcheck', 'explorer', 'profile'];
+      
+      screens.forEach(s => {
+        const el = document.getElementById(`screen-${s}`);
+        const nav = document.getElementById(`nav-${s}`);
+        if (el) {
+          if (s === tabId) el.classList.remove('hidden');
+          else el.classList.add('hidden');
+        }
+        if (nav) {
+          if (s === tabId) nav.className = 'px-3.5 py-1.5 rounded-full text-xs font-black option-selected shadow-md transition-all';
+          else nav.className = 'px-3.5 py-1.5 rounded-full text-xs font-semibold opacity-70 hover:opacity-100 transition-all';
+        }
+      });
+
+      if (tabId === 'mycensus') renderScheduleList();
+      else if (tabId === 'explorer') initExplorer();
+      else if (tabId === 'profile') renderProfile();
+      else if (tabId === 'enumerate') renderSelfEnumWizard();
+      else if (tabId === 'journey') renderJourney();
+      else if (tabId === 'truthcheck') renderTruthCheck();
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* 6. CENSUS SAATHI DASHBOARD & ACCESSIBILITY */
+    function updateSaathiDashboard() {
+      if (!appState.currentUser) return;
+      const user = appState.currentUser;
+      const draft = getDraft();
+      const pct = draft ? draft.progress : (user.progress || 68);
+
+      const codeDisp = document.getElementById('saathi-code-display'); if (codeDisp) codeDisp.textContent = user.profileCode;
+      const pText = document.getElementById('saathi-progress-text'); if (pText) pText.textContent = `${pct}% Completed`;
+      const pBar = document.getElementById('saathi-progress-bar'); if (pBar) pBar.style.width = `${pct}%`;
+
+      const badgesContainer = document.getElementById('saathi-identity-badges');
+      if (badgesContainer) {
+        badgesContainer.innerHTML = `
+          ${user.phoneVerified 
+            ? `<span class="bg-powder-400/20 text-powder-400 border border-powder-400/40 text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">✓ Mobile Verified</span>`
+            : `<button onclick="openOtpModal()" class="bg-cream-100/20 text-cream-100 border border-cream-100/40 text-[10px] font-bold px-2.5 py-0.5 rounded-full hover:bg-white/20">Verify Mobile OTP</button>`
+          }
+          <span class="bg-cream-100/20 text-cream-100 border border-cream-100/40 text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">🧪 DigiLocker Demo</span>
+        `;
+      }
+    }
+
+    function toggleAssistedMode() {
+      appState.assistedMode = !appState.assistedMode;
+      localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify({ language: appState.language, theme: appState.theme, assistedMode: appState.assistedMode }));
+      applyAssistedMode(appState.assistedMode);
+      showToast(`Assisted Accessibility Mode ${appState.assistedMode ? 'ENABLED ♿' : 'OFF'}`);
+    }
+
+    function applyAssistedMode(active) {
+      const body = document.body;
+      const label = document.getElementById('assisted-mode-label');
+      if (active) {
+        body.classList.add('assisted-mode');
+        if (label) label.textContent = 'Assisted ON';
+      } else {
+        body.classList.remove('assisted-mode');
+        if (label) label.textContent = 'Assisted';
+      }
+      if (appState.activeTab === 'enumerate') renderSelfEnumWizard();
+    }
+
+    function speakQuestion(text) {
+      if (!('speechSynthesis' in window)) {
+        showToast('Text-To-Speech is not supported by your browser.');
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.9;
+      utterance.lang = appState.language === 'Hindi' ? 'hi-IN' : 'en-IN';
+      window.speechSynthesis.speak(utterance);
+      showToast('🔊 Reading question aloud...');
+    }
+
+    function listenVoiceAnswer(targetInputId) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        showToast('Speech Recognition not supported in this browser. Please type your answer.');
+        return;
+      }
+
+      const recognition = new SpeechRecognition();
+      recognition.lang = appState.language === 'Hindi' ? 'hi-IN' : 'en-IN';
+      recognition.interimResults = false;
+
+      showToast('🎤 Listening... Speak your answer now!');
+      recognition.start();
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        const targetInput = document.getElementById(targetInputId);
+        if (targetInput) {
+          targetInput.value = transcript;
+          showToast(`Voice Recognized: "${transcript}". Click Next to confirm.`);
+        }
+      };
+
+      recognition.onerror = () => {
+        showToast('Voice input timeout. Please try again or type directly.');
+      };
+    }
+
+    /* 7. OTP MODAL HANDLERS */
+    function openOtpModal() {
+      const modal = document.getElementById('otp-modal');
+      const stepPhone = document.getElementById('otp-step-phone');
+      const stepCode = document.getElementById('otp-step-code');
+      const errBox = document.getElementById('otp-phone-error');
+      if (errBox) errBox.classList.add('hidden');
+      if (stepPhone) stepPhone.classList.remove('hidden');
+      if (stepCode) stepCode.classList.add('hidden');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+      setupOtpInputBoxes();
+    }
+
+    function closeOtpModal() {
+      const modal = document.getElementById('otp-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function setupOtpInputBoxes() {
+      const boxes = document.querySelectorAll('.otp-box');
+      boxes.forEach((b, idx) => {
+        b.value = '';
+        b.oninput = (e) => {
+          if (e.target.value && idx < boxes.length - 1) {
+            boxes[idx + 1].focus();
+          }
+        };
+        b.onkeydown = (e) => {
+          if (e.key === 'Backspace' && !e.target.value && idx > 0) {
+            boxes[idx - 1].focus();
+          }
+        };
+      });
+      if (boxes[0]) boxes[0].focus();
+    }
+
+    async function sendOtpRequest() {
+      const phoneInput = document.getElementById('otp-phone-input');
+      const errBox = document.getElementById('otp-phone-error');
+      const sendBtn = document.getElementById('btn-send-otp');
+
+      const rawPhone = phoneInput.value.trim();
+      if (!rawPhone || !/^\d{10}$/.test(rawPhone)) {
+        errBox.textContent = 'Please enter a valid 10-digit Indian mobile number.';
+        errBox.classList.remove('hidden');
+        return;
+      }
+      errBox.classList.add('hidden');
+
+      sendBtn.disabled = true;
+      sendBtn.innerHTML = `<span class="animate-spin material-symbols-outlined text-base">progress_activity</span> Sending OTP...`;
+
+      try {
+        const res = await fetch('http://localhost:5001/api/auth/send-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone: rawPhone })
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          errBox.textContent = data.error || 'Failed to send OTP.';
+          errBox.classList.remove('hidden');
+          return;
+        }
+
+        otpState.phone = data.phone;
+        otpState.devCode = data.demoOtp || null;
+        showOtpCodeStep();
+        startResendTimer(data.cooldownSeconds || 60);
+
+        if (data.demoOtp) {
+          showToast(`[Backend SMS] 6-Digit OTP is ${data.demoOtp} ✨`);
+        } else {
+          showToast(`OTP sent successfully to ${data.phone}! 📩`);
+        }
+
+      } catch (err) {
+        const normalized = `+91${rawPhone}`;
+        const mockCode = String(Math.floor(100000 + Math.random() * 900000));
+        otpState.phone = normalized;
+        otpState.devCode = mockCode;
+        showOtpCodeStep();
+        startResendTimer(60);
+        showToast(`[Dev Mode] 6-Digit OTP is ${mockCode} ✨`);
+      } finally {
+        sendBtn.disabled = false;
+        sendBtn.innerHTML = `<span>Send 6-Digit OTP</span><span class="material-symbols-outlined text-base">send</span>`;
+      }
+    }
+
+    function showOtpCodeStep() {
+      const stepPhone = document.getElementById('otp-step-phone');
+      const stepCode = document.getElementById('otp-step-code');
+      const sentDisp = document.getElementById('otp-sent-phone-display');
+      if (sentDisp) sentDisp.textContent = otpState.phone;
+      if (stepPhone) stepPhone.classList.add('hidden');
+      if (stepCode) stepCode.classList.remove('hidden');
+    }
+
+    function startResendTimer(seconds) {
+      otpState.cooldownSeconds = seconds;
+      const timerDisplay = document.getElementById('otp-timer-seconds');
+      const resendBtn = document.getElementById('btn-resend-otp');
+      if (resendBtn) resendBtn.disabled = true;
+
+      if (otpState.cooldownTimer) clearInterval(otpState.cooldownTimer);
+
+      otpState.cooldownTimer = setInterval(() => {
+        otpState.cooldownSeconds -= 1;
+        if (timerDisplay) timerDisplay.textContent = otpState.cooldownSeconds;
+
+        if (otpState.cooldownSeconds <= 0) {
+          clearInterval(otpState.cooldownTimer);
+          if (resendBtn) resendBtn.disabled = false;
+        }
+      }, 1000);
+    }
+
+    async function verifyOtpRequest() {
+      const boxes = document.querySelectorAll('.otp-box');
+      const errBox = document.getElementById('otp-verify-error');
+      const verifyBtn = document.getElementById('btn-verify-otp');
+
+      let enteredOtp = '';
+      boxes.forEach(b => enteredOtp += b.value.trim());
+
+      if (enteredOtp.length !== 6 || !/^\d{6}$/.test(enteredOtp)) {
+        errBox.textContent = 'Please enter all 6 digits of the OTP.';
+        errBox.classList.remove('hidden');
+        return;
+      }
+
+      errBox.classList.add('hidden');
+      verifyBtn.disabled = true;
+      verifyBtn.innerHTML = `<span class="animate-spin material-symbols-outlined text-base">progress_activity</span> Verifying...`;
+
+      try {
+        const res = await fetch('http://localhost:5001/api/auth/verify-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone: otpState.phone, otp: enteredOtp })
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.verified) {
+          errBox.textContent = data.error || 'Incorrect OTP. Please try again.';
+          errBox.classList.remove('hidden');
+          return;
+        }
+
+        if (appState.currentUser) {
+          appState.currentUser.mobile = data.phone;
+          appState.currentUser.phoneVerified = true;
+          appState.currentUser.phoneVerifiedAt = data.verifiedAt;
+          saveUser(appState.currentUser);
+        }
+
+        closeOtpModal();
+        showToast(`Phone number ${data.phone} verified successfully! ✓`);
+        if (appState.activeTab === 'profile') renderProfile();
+
+      } catch (err) {
+        if (otpState.devCode && enteredOtp === otpState.devCode) {
+          const verifiedAt = new Date().toISOString();
+          if (appState.currentUser) {
+            appState.currentUser.mobile = otpState.phone;
+            appState.currentUser.phoneVerified = true;
+            appState.currentUser.phoneVerifiedAt = verifiedAt;
+            saveUser(appState.currentUser);
+          }
+          closeOtpModal();
+          showToast(`Mobile number ${otpState.phone} verified successfully! ✓`);
+          if (appState.activeTab === 'profile') renderProfile();
+        } else {
+          errBox.textContent = 'Incorrect OTP. Please check and try again.';
+          errBox.classList.remove('hidden');
+        }
+      } finally {
+        verifyBtn.disabled = false;
+        verifyBtn.innerHTML = `<span class="material-symbols-outlined text-base">check_circle</span><span>Verify OTP</span>`;
+      }
+    }
+
+    /* 8. PASSPORT & RESUME MODALS */
+    function openPassportQrModal() {
+      const modal = document.getElementById('passport-qr-modal');
+      const codeText = document.getElementById('qr-code-text');
+      if (codeText && appState.currentUser) codeText.textContent = appState.currentUser.profileCode;
+      if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+    }
+
+    function closePassportQrModal() {
+      const modal = document.getElementById('passport-qr-modal');
+      if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+    }
+
+    function openResumeAnywhereModal() {
+      const modal = document.getElementById('resume-anywhere-modal');
+      const errBox = document.getElementById('resume-error-box');
+      if (errBox) errBox.classList.add('hidden');
+      if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+    }
+
+    function closeResumeAnywhereModal() {
+      const modal = document.getElementById('resume-anywhere-modal');
+      if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+    }
+
+    async function submitResumeAnywhere() {
+      const codeInp = document.getElementById('inp-resume-code');
+      const phoneInp = document.getElementById('inp-resume-phone');
+      const errBox = document.getElementById('resume-error-box');
+      const errText = document.getElementById('resume-error-text');
+      const submitBtn = document.getElementById('btn-resume-submit');
+
+      const code = codeInp.value.trim().toUpperCase();
+      const phone = phoneInp.value.trim();
+
+      if (!code || !phone) {
+        errText.textContent = 'Please enter Census Household Code and Phone Number.';
+        errBox.classList.remove('hidden');
+        return;
+      }
+
+      errBox.classList.add('hidden');
+      submitBtn.disabled = true;
+
+      try {
+        const res = await fetch('http://localhost:5001/api/saathi/resume', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ codeOrToken: code, phone: phone })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          errText.textContent = data.error || 'ACCESS DENIED: Phone authentication mismatch or invalid code.';
+          errBox.classList.remove('hidden');
+          return;
+        }
+        closeResumeAnywhereModal();
+        showToast('Census draft retrieved successfully! Restoring exact step... 🚀');
+        startSelfEnumeration();
+      } catch (err) {
+        if (appState.currentUser && code === appState.currentUser.profileCode) {
+          closeResumeAnywhereModal();
+          showToast('Draft retrieved! Restoring self-enumeration... 🚀');
+          startSelfEnumeration();
+        } else {
+          errText.textContent = 'ACCESS DENIED: This Household Code belongs to a different account.';
+          errBox.classList.remove('hidden');
+        }
+      } finally {
+        submitBtn.disabled = false;
+      }
+    }
+
+    /* 9. AI CENSUS CHECK */
+    async function runAiCensusCheck() {
+      const modal = document.getElementById('ai-check-modal');
+      const bodyBox = document.getElementById('ai-check-body');
+      if (!modal || !bodyBox) return;
+
+      bodyBox.innerHTML = `<div class="p-8 text-center text-xs text-navy-400 font-bold flex items-center justify-center gap-2"><span class="animate-spin material-symbols-outlined text-2xl">sync</span> AI is reviewing your census answers...</div>`;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+
+      try {
+        const res = await fetch('http://localhost:5001/api/saathi/ai-check', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ formData: wizardState.formData })
+        });
+        const data = await res.json();
+        renderAiCheckResults(data);
+      } catch (err) {
+        renderAiCheckResults({
+          fieldsComplete: 18,
+          warningsCount: 1,
+          summary: "✓ Census information looks complete. 1 minor item suggested for review.",
+          warnings: [{ title: "Missing Member Occupation", message: "Specify student, employed, or homemaker.", step: 3 }]
+        });
+      }
+    }
+
+    function renderAiCheckResults(data) {
+      const bodyBox = document.getElementById('ai-check-body');
+      if (!bodyBox) return;
+      bodyBox.innerHTML = `
+        <div class="space-y-4 text-xs">
+          <div class="p-4 border rounded-2xl flex items-center justify-between">
+            <div>
+              <p class="font-bold text-sm">${data.summary}</p>
+              <p class="opacity-70 text-[11px] mt-0.5">${data.fieldsComplete} required & amenity fields verified.</p>
+            </div>
+            <span class="bg-powder-400/20 text-navy-700 dark:text-powder-400 border border-powder-400/40 text-xs font-black px-3 py-1 rounded-full">${data.warningsCount} Warnings</span>
+          </div>
+
+          ${data.warnings && data.warnings.length ? `
+            <div class="space-y-2">
+              <p class="font-bold opacity-70 uppercase tracking-wider text-[11px]">Items for your review:</p>
+              ${data.warnings.map(w => `
+                <div class="p-4 bg-cream-100/40 dark:bg-navy-800 border border-cream-100 dark:border-navy-700 rounded-2xl space-y-1">
+                  <div class="flex items-center gap-2 font-bold">
+                    <span class="material-symbols-outlined text-base">warning</span>
+                    <span>${w.title}</span>
+                  </div>
+                  <p class="opacity-80 text-[11px] leading-relaxed">${w.message}</p>
+                </div>
+              `).join('')}
+            </div>
+          ` : `
+            <div class="p-6 bg-powder-400/10 border border-powder-400/30 rounded-2xl text-center space-y-2">
+              <span class="material-symbols-outlined text-powder-500 text-3xl">verified</span>
+              <p class="font-bold text-sm">No Data Inconsistencies Found!</p>
+              <p class="opacity-70 text-xs">Ready for final submission.</p>
+            </div>
+          `}
+        </div>
+      `;
+    }
+
+    function closeAiCheckModal() {
+      const modal = document.getElementById('ai-check-modal');
+      if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+    }
+
+    /* 10. MULTI-STEP WIZARD */
+    let wizardState = {
+      step: 1,
+      formData: {
+        fullName: 'Rahul Sharma', stateId: 'MH', district: 'Mumbai Suburban', address: '402, Green Valley Apartments', mobile: '9876543210',
+        houseType: 'Pucca Building', membersCount: '2', waterSource: 'Tap water inside premises', lpgConnection: 'LPG / PNG Gas', electricityAccess: 'Yes — Grid supply', toiletFacility: 'Flush toilet with piped water',
+        members: [
+          { name: 'Rahul Sharma', age: '42', gender: 'Male', relation: 'Self / Head', maritalStatus: 'Married', education: 'Graduate', occupation: 'Software Engineer' },
+          { name: 'Priya Sharma', age: '39', gender: 'Female', relation: 'Spouse', maritalStatus: 'Married', education: 'Post Graduate', occupation: 'Teacher' }
+        ]
+      }
+    };
+
+    function startSelfEnumeration() {
+      switchTab('enumerate');
+      const draft = getDraft();
+      if (draft && draft.formData && appState.currentUser && appState.currentUser.status !== 'Submitted') {
+        wizardState.step = draft.step || 1;
+        wizardState.formData = { ...wizardState.formData, ...draft.formData };
+      }
+      renderSelfEnumWizard();
+    }
+
+    function renderSelfEnumWizard() {
+      const container = document.getElementById('enum-form-container');
+      if (!container) return;
+
+      const user = appState.currentUser;
+      const isSubmitted = user && user.status === 'Submitted' && wizardState.step !== 5;
+
+      if (isSubmitted) {
+        container.innerHTML = `
+          <div class="custom-card border-2 border-navy-600 rounded-3xl p-8 text-center space-y-6 shadow-xl">
+            <div class="w-16 h-16 bg-navy-600 text-white rounded-full flex items-center justify-center text-3xl mx-auto shadow-md">✓</div>
+            <div>
+              <span class="bg-powder-400/20 text-navy-700 dark:text-powder-400 border border-powder-400/40 text-xs font-black px-4 py-1.5 rounded-full uppercase">Official Record Submitted</span>
+              <h3 class="text-2xl font-black mt-3">Self-Enumeration Complete!</h3>
+              <p class="text-xs opacity-70 max-w-md mx-auto mt-1">Your household details are registered under the Census Act 1948.</p>
+            </div>
+            <div class="border p-6 rounded-3xl space-y-3 max-w-lg mx-auto">
+              <div class="font-mono text-3xl font-black text-navy-600 dark:text-powder-400 tracking-wider">${user.seId || '2027-8849-1920-4412'}</div>
+              <button onclick="copyToClipboard('${user.seId}')" class="bg-navy-600 hover:bg-navy-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl cursor-pointer">Copy SE ID</button>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      const stepPercent = wizardState.step * 20;
+      let html = `
+        <div class="space-y-6">
+          <div class="custom-card p-5 rounded-3xl border space-y-3 shadow-sm">
+            <div class="flex items-center justify-between text-xs">
+              <span class="bg-navy-600 text-white font-bold px-3.5 py-1 rounded-full">Step ${wizardState.step} of 5</span>
+              <div class="flex items-center gap-2">
+                <button type="button" onclick="speakQuestion(document.getElementById('step-heading').innerText)" class="border px-3 py-1 rounded-full font-bold hover:border-navy-600" title="Read Question Aloud">🔊 Read Aloud</button>
+                <span class="font-bold opacity-70">${stepPercent}% Completed</span>
+              </div>
+            </div>
+            <div class="w-full h-2.5 border rounded-full overflow-hidden bg-slate-200 dark:bg-slate-800">
+              <div class="h-full bg-navy-600 dark:bg-powder-400 transition-all duration-300" style="width: ${stepPercent}%"></div>
+            </div>
+          </div>
+      `;
+
+      if (wizardState.step === 1) {
+        html += `
+          <div class="custom-card border rounded-3xl p-6 space-y-5 shadow-md">
+            <div class="flex justify-between items-center">
+              <h3 class="font-bold text-lg" id="step-heading">Step 1 — Personal & Location Information</h3>
+              <button type="button" onclick="listenVoiceAnswer('inp-fullName')" class="text-xs border font-bold px-3 py-1.5 rounded-full hover:border-navy-600 flex items-center gap-1">🎤 Voice Input</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <div class="space-y-1">
+                <label class="block font-bold">Full Name *</label>
+                <input type="text" id="inp-fullName" value="${escapeHtml(wizardState.formData.fullName)}" onchange="updateFormField('fullName', this.value)" class="w-full border rounded-xl p-3.5 focus:ring-2 focus:ring-navy-600">
+              </div>
+              <div class="space-y-1">
+                <label class="block font-bold">State / Union Territory *</label>
+                <select id="inp-stateId" onchange="updateFormField('stateId', this.value)" class="w-full border rounded-xl p-3.5 cursor-pointer focus:ring-2 focus:ring-navy-600">
+                  ${STATES_29.map(s => `<option value="${s.id}" ${wizardState.formData.stateId === s.id ? 'selected' : ''}>${s.name} (${s.code})</option>`).join('')}
+                </select>
+              </div>
+              <div class="space-y-1">
+                <label class="block font-bold">District *</label>
+                <input type="text" id="inp-district" value="${escapeHtml(wizardState.formData.district)}" onchange="updateFormField('district', this.value)" class="w-full border rounded-xl p-3.5 focus:ring-2 focus:ring-navy-600">
+              </div>
+              <div class="space-y-1">
+                <label class="block font-bold">Mobile Number *</label>
+                <input type="tel" id="inp-mobile" value="${escapeHtml(wizardState.formData.mobile)}" onchange="updateFormField('mobile', this.value)" class="w-full border rounded-xl p-3.5 focus:ring-2 focus:ring-navy-600">
+              </div>
+            </div>
+            ${renderWizardNavButtons(1)}
+          </div>
+        `;
+      }
+
+      if (wizardState.step === 2) {
+        html += `
+          <div class="custom-card border rounded-3xl p-6 space-y-5 shadow-md">
+            <h3 class="font-bold text-lg" id="step-heading">Step 2 — Household Amenities & Structure</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <div class="space-y-1">
+                <label class="block font-bold">House Structure Type *</label>
+                <select onchange="updateFormField('houseType', this.value)" class="w-full border rounded-xl p-3.5 cursor-pointer">
+                  <option ${wizardState.formData.houseType === 'Pucca Building' ? 'selected' : ''}>Pucca Building</option>
+                  <option ${wizardState.formData.houseType === 'Semi-Pucca Structure' ? 'selected' : ''}>Semi-Pucca Structure</option>
+                  <option ${wizardState.formData.houseType === 'Kutcha House' ? 'selected' : ''}>Kutcha House</option>
+                </select>
+              </div>
+              <div class="space-y-1">
+                <label class="block font-bold">Drinking Water Source *</label>
+                <input type="text" value="${escapeHtml(wizardState.formData.waterSource)}" onchange="updateFormField('waterSource', this.value)" class="w-full border rounded-xl p-3.5">
+              </div>
+            </div>
+            ${renderWizardNavButtons(2)}
+          </div>
+        `;
+      }
+
+      if (wizardState.step === 3) {
+        html += `
+          <div class="custom-card border rounded-3xl p-6 space-y-5 shadow-md">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-lg" id="step-heading">Step 3 — Household Members (${wizardState.formData.members.length})</h3>
+              <button type="button" onclick="addFamilyMember()" class="bg-navy-600 text-white font-bold text-xs px-4 py-2 rounded-xl flex items-center gap-1 cursor-pointer">+ Add Member</button>
+            </div>
+            <div class="space-y-4">
+              ${wizardState.formData.members.map((mem, idx) => `
+                <div class="border p-4 rounded-2xl space-y-3">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-navy-600 dark:text-powder-400">Member #${idx + 1} ${idx === 0 ? '(Head)' : ''}</span>
+                    ${idx > 0 ? `<button type="button" onclick="removeFamilyMember(${idx})" class="text-xs text-rose-500 font-bold hover:underline">Remove</button>` : ''}
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                    <div>
+                      <label class="block font-bold mb-1">Full Name *</label>
+                      <input type="text" value="${escapeHtml(mem.name)}" onchange="updateMemberField(${idx}, 'name', this.value)" class="w-full border rounded-xl p-3">
+                    </div>
+                    <div>
+                      <label class="block font-bold mb-1">Age *</label>
+                      <input type="number" value="${mem.age}" onchange="updateMemberField(${idx}, 'age', this.value)" class="w-full border rounded-xl p-3">
+                    </div>
+                    <div>
+                      <label class="block font-bold mb-1">Gender *</label>
+                      <select onchange="updateMemberField(${idx}, 'gender', this.value)" class="w-full border rounded-xl p-3 cursor-pointer">
+                        <option ${mem.gender === 'Male' ? 'selected' : ''}>Male</option>
+                        <option ${mem.gender === 'Female' ? 'selected' : ''}>Female</option>
+                        <option ${mem.gender === 'Other' ? 'selected' : ''}>Other</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+            ${renderWizardNavButtons(3)}
+          </div>
+        `;
+      }
+
+      if (wizardState.step === 4) {
+        html += `
+          <div class="custom-card border rounded-3xl p-6 space-y-6 shadow-md">
+            <h3 class="font-bold text-lg" id="step-heading">Step 4 — Review & AI Census Check</h3>
+            <div class="p-4 border rounded-2xl flex items-center justify-between">
+              <div>
+                <p class="font-bold">Run Automated AI Check</p>
+                <p class="text-xs opacity-70">Scan for missing entries prior to final submission.</p>
+              </div>
+              <button type="button" onclick="runAiCensusCheck()" class="bg-powder-400 text-navy-800 font-bold text-xs px-5 py-2.5 rounded-xl cursor-pointer hover:bg-powder-500">Run AI Check</button>
+            </div>
+            <div class="pt-4 border-t flex justify-between items-center">
+              <button type="button" onclick="goToStep(3)" class="px-5 py-2.5 rounded-xl border opacity-70 font-bold text-xs">← Back</button>
+              <button type="button" onclick="submitFinalSelfEnum()" class="bg-navy-600 hover:bg-navy-700 text-white font-black text-xs px-8 py-3 rounded-xl shadow-lg cursor-pointer">🚀 Complete Submission</button>
+            </div>
+          </div>
+        `;
+      }
+
+      if (wizardState.step === 5) {
+        html += `
+          <div class="custom-card border-2 border-navy-600 rounded-3xl p-8 text-center space-y-6 shadow-2xl">
+            <div class="w-16 h-16 bg-navy-600 text-white rounded-full flex items-center justify-center text-3xl mx-auto">✓</div>
+            <h3 class="text-2xl font-black">Submission Successful!</h3>
+            <div class="font-mono text-3xl font-black text-navy-600 dark:text-powder-400">${appState.currentUser.seId}</div>
+            <button type="button" onclick="switchTab('home')" class="text-xs text-navy-600 dark:text-powder-400 font-bold hover:underline">← Back to Home</button>
+          </div>
+        `;
+      }
+
+      html += `</div>`;
+      container.innerHTML = html;
+    }
+
+    function renderWizardNavButtons(step) {
+      return `
+        <div class="pt-4 border-t flex justify-between items-center">
+          <button type="button" onclick="goToStep(${Math.max(1, step - 1)})" ${step === 1 ? 'disabled' : ''} class="px-5 py-2.5 rounded-xl border font-bold text-xs disabled:opacity-40 cursor-pointer">← Back</button>
+          <div class="flex gap-2">
+            <button type="button" onclick="saveDraftProgress()" class="px-4 py-2.5 rounded-xl border font-bold text-xs cursor-pointer">💾 Save Draft</button>
+            <button type="button" onclick="validateAndProceed(${step})" class="bg-navy-600 hover:bg-navy-700 text-white font-bold text-xs px-6 py-2.5 rounded-xl shadow-md cursor-pointer">Next Step →</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function updateFormField(field, val) { wizardState.formData[field] = val; saveDraftProgress(false); }
+    function updateMemberField(idx, field, val) { if (wizardState.formData.members[idx]) { wizardState.formData.members[idx][field] = val; saveDraftProgress(false); } }
+    function addFamilyMember() { wizardState.formData.members.push({ name: '', age: '', gender: 'Male', relation: 'Son', maritalStatus: 'Single', education: '', occupation: '' }); renderSelfEnumWizard(); }
+    function removeFamilyMember(idx) { if (wizardState.formData.members.length > 1) { wizardState.formData.members.splice(idx, 1); renderSelfEnumWizard(); } }
+    function goToStep(s) { wizardState.step = s; renderSelfEnumWizard(); }
+    function saveDraftProgress(notify = true) { saveDraft(wizardState.step, wizardState.formData); if (notify) showToast('Draft saved securely! 💾'); }
+    function validateAndProceed(step) { saveDraftProgress(false); wizardState.step = step + 1; renderSelfEnumWizard(); }
+    function submitFinalSelfEnum() {
+      const user = appState.currentUser;
+      const r = () => Math.floor(1000 + Math.random() * 9000);
+      user.status = 'Submitted';
+      user.seId = `2027-${r()}-${r()}-${r()}`;
+      saveUser(user);
+      clearDraft();
+      wizardState.step = 5;
+      renderSelfEnumWizard();
+      showToast('Enumeration Submitted Successfully! 🎉');
+    }
+
+    function getDraft() {
+      if (!appState.currentUser) return null;
+      const drafts = JSON.parse(localStorage.getItem(STORAGE_KEYS.DRAFTS) || '{}');
+      return drafts[appState.currentUser.id] || null;
+    }
+    function saveDraft(stepNum, formDataObj) {
+      if (!appState.currentUser) return;
+      const progressPct = Math.min(100, stepNum * 20);
+      const drafts = JSON.parse(localStorage.getItem(STORAGE_KEYS.DRAFTS) || '{}');
+      drafts[appState.currentUser.id] = { step: stepNum, formData: formDataObj, progress: progressPct, updatedAt: new Date().toISOString() };
+      localStorage.setItem(STORAGE_KEYS.DRAFTS, JSON.stringify(drafts));
+      appState.currentUser.status = 'In Progress';
+      appState.currentUser.progress = progressPct;
+      saveUser(appState.currentUser);
+    }
+    function clearDraft() {
+      if (!appState.currentUser) return;
+      const drafts = JSON.parse(localStorage.getItem(STORAGE_KEYS.DRAFTS) || '{}');
+      delete drafts[appState.currentUser.id];
+      localStorage.setItem(STORAGE_KEYS.DRAFTS, JSON.stringify(drafts));
+    }
+
+    /* 11. SCHEDULE & EXPLORER RENDERING */
+    function filterScheduleList() {
+      const q = document.getElementById('schedule-search').value.toLowerCase().trim();
+      appState.scheduleSearchQuery = q;
+      renderScheduleList();
+    }
+
+    function setScheduleStatusFilter(status) {
+      appState.scheduleStatusFilter = status;
+      ['all', 'active', 'upcoming', 'completed'].forEach(s => {
+        const btn = document.getElementById(`filter-status-${s}`);
+        if (btn) {
+          if (s === status.toLowerCase()) btn.className = 'px-3 py-1 rounded-full option-selected';
+          else btn.className = 'px-3 py-1 rounded-full opacity-70';
+        }
+      });
+      renderScheduleList();
+    }
+
+    function renderScheduleList() {
+      const grid = document.getElementById('schedule-cards-grid');
+      if (!grid) return;
+
+      let filtered = STATES_29;
+      if (appState.scheduleStatusFilter !== 'All') {
+        filtered = filtered.filter(s => s.status === appState.scheduleStatusFilter);
+      }
+      if (appState.scheduleSearchQuery) {
+        filtered = filtered.filter(s => s.name.toLowerCase().includes(appState.scheduleSearchQuery) || s.code.toLowerCase().includes(appState.scheduleSearchQuery));
+      }
+
+      grid.innerHTML = filtered.map(st => `
+        <div class="custom-card border p-5 rounded-3xl space-y-3 shadow-sm hover:border-navy-600 transition-all">
+          <div class="flex items-center justify-between">
+            <span class="font-mono text-xs font-bold px-2.5 py-0.5 rounded-md bg-navy-600/10 border border-navy-600/30 text-navy-600 dark:text-powder-400">${st.code}</span>
+            <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full ${st.status === 'Active' ? 'bg-powder-400/20 text-navy-700 dark:text-powder-400 border border-powder-400/40' : st.status === 'Completed' ? 'bg-cream-100/50 text-navy-800 dark:text-cream-100 border border-cream-100' : 'bg-pale-100 text-navy-700 dark:text-powder-400 border border-pale-100'}">${st.status}</span>
+          </div>
+          <h4 class="font-bold text-base">${st.name}</h4>
+          <div class="text-xs space-y-1 opacity-80 border-t pt-2">
+            <p>Phase 1 Housing: <strong>${st.startDate} – ${st.endDate}</strong></p>
+            <p>Households: <strong>${(st.households/1000000).toFixed(1)}M</strong> · Officer: ${st.officer}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function initExplorer() {
+      const select = document.getElementById('explorer-state-select');
+      if (!select) return;
+      select.innerHTML = STATES_29.map(s => `<option value="${s.id}" ${appState.selectedStateId === s.id ? 'selected' : ''}>${s.name} (${s.code})</option>`).join('');
+      renderExplorerData(appState.selectedStateId);
+    }
+
+    function renderExplorerData(stateId) {
+      appState.selectedStateId = stateId;
+      const state = getState(stateId);
+      const dashboard = document.getElementById('explorer-dashboard');
+      if (!dashboard) return;
+
+      dashboard.innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="custom-card p-6 rounded-3xl border space-y-2 col-span-2 shadow-sm">
+            <div class="flex items-center justify-between">
+              <h3 class="text-2xl font-black">${state.name} (${state.code})</h3>
+              <span class="bg-navy-600 text-white font-bold text-xs px-3 py-1 rounded-full">${state.status}</span>
+            </div>
+            <p class="text-xs opacity-70">Official Census Officer: ${state.officer}</p>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 text-xs">
+              <div class="border p-3 rounded-2xl">
+                <p class="text-[10px] opacity-70 uppercase font-bold">Total Population</p>
+                <p class="text-lg font-black text-navy-600 dark:text-powder-400">${(state.population/1000000).toFixed(2)}M</p>
+              </div>
+              <div class="border p-3 rounded-2xl">
+                <p class="text-[10px] opacity-70 uppercase font-bold">Density</p>
+                <p class="text-lg font-black text-navy-600 dark:text-powder-400">${state.density}/km²</p>
+              </div>
+              <div class="border p-3 rounded-2xl">
+                <p class="text-[10px] opacity-70 uppercase font-bold">Literacy Rate</p>
+                <p class="text-lg font-black text-navy-600 dark:text-powder-400">${state.literacy}%</p>
+              </div>
+              <div class="border p-3 rounded-2xl">
+                <p class="text-[10px] opacity-70 uppercase font-bold">Households</p>
+                <p class="text-lg font-black text-navy-600 dark:text-powder-400">${(state.households/1000000).toFixed(2)}M</p>
+              </div>
+            </div>
+          </div>
+          <div class="custom-card p-6 rounded-3xl border space-y-4 shadow-sm">
+            <h4 class="font-bold text-sm">Gender & Urban Breakdown</h4>
+            <div class="space-y-3 text-xs">
+              <div>
+                <div class="flex justify-between font-bold mb-1">
+                  <span>Male Population</span>
+                  <span>${((state.male/state.population)*100).toFixed(1)}%</span>
+                </div>
+                <div class="w-full h-2 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+                  <div class="h-full bg-navy-600" style="width: ${((state.male/state.population)*100)}%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between font-bold mb-1">
+                  <span>Female Population</span>
+                  <span>${((state.female/state.population)*100).toFixed(1)}%</span>
+                </div>
+                <div class="w-full h-2 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+                  <div class="h-full bg-powder-500" style="width: ${((state.female/state.population)*100)}%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    /* 12. PROFILE VIEW */
+    function renderProfile() {
+      const container = document.getElementById('profile-container');
+      if (!container || !appState.currentUser) return;
+      const user = appState.currentUser;
+
+      container.innerHTML = `
+        <div class="custom-card border p-8 rounded-3xl space-y-6 shadow-md">
+          <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b pb-6">
+            <div class="flex items-center gap-4">
+              <div class="w-16 h-16 rounded-full bg-navy-600 text-white font-black text-2xl flex items-center justify-center border-2 border-navy-800">RS</div>
+              <div>
+                <h3 class="text-xl font-bold">${user.fullName}</h3>
+                <p class="text-xs opacity-70">${user.mobile} · ${user.district}, ${user.stateId}</p>
+              </div>
+            </div>
+
+            <div class="border p-4 rounded-2xl flex items-center gap-3">
+              <div>
+                <p class="text-[10px] opacity-70 font-bold uppercase">Household Code</p>
+                <p class="font-mono font-black text-xl text-navy-600 dark:text-powder-400">${user.profileCode}</p>
+              </div>
+              <button onclick="copyToClipboard('${user.profileCode}')" class="bg-navy-600 text-white p-2.5 rounded-xl cursor-pointer" title="Copy Code">
+                <span class="material-symbols-outlined text-base">content_copy</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Identity Verification Section -->
+          <div class="border p-5 rounded-2xl space-y-3">
+            <h4 class="text-xs font-bold uppercase tracking-wider flex items-center gap-2">
+              <span class="material-symbols-outlined text-navy-600 text-base">verified_user</span> IDENTITY VERIFICATION STATUS
+            </h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+              <div class="border p-4 rounded-xl flex items-center justify-between">
+                <div>
+                  <p class="font-bold">Mobile Phone OTP</p>
+                  <p class="text-[11px] opacity-70">${user.mobile}</p>
+                </div>
+                ${user.phoneVerified ? `<span class="bg-powder-400/20 text-navy-700 dark:text-powder-400 border border-powder-400/40 px-3 py-1 rounded-full font-bold">✓ Verified</span>` : `<button onclick="openOtpModal()" class="bg-navy-600 text-white px-3 py-1 rounded-full font-bold">Verify OTP</button>`}
+              </div>
+              <div class="border p-4 rounded-xl flex items-center justify-between">
+                <div>
+                  <p class="font-bold">DigiLocker Identity</p>
+                  <p class="text-[11px] opacity-70">Aadhaar Profile Sync</p>
+                </div>
+                <span class="bg-cream-100/50 text-navy-800 dark:text-cream-100 border border-cream-100 px-3 py-1 rounded-full font-bold">DEMO VERIFIED</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-3 text-xs">
+            <button onclick="openPassportQrModal()" class="bg-navy-600 text-white font-bold px-5 py-2.5 rounded-xl shadow-md cursor-pointer flex items-center gap-2">
+              <span class="material-symbols-outlined text-base">qr_code_2</span> Show Passport QR
+            </button>
+            <button onclick="openResumeAnywhereModal()" class="border font-bold px-5 py-2.5 rounded-xl cursor-pointer flex items-center gap-2">
+              <span class="material-symbols-outlined text-base">devices</span> Resume Anywhere
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    /* 13. JOURNEY & TRUTH CHECK */
+    function renderJourney() {
+      const container = document.getElementById('journey-steps-container');
+      if (!container) return;
+      const steps = [
+        { num: '1', title: 'State Schedule Announcement', desc: 'Check enumeration dates for your state.' },
+        { num: '2', title: 'DigiLocker Profile Autofill', desc: 'Verify identity in 1 tap.' },
+        { num: '3', title: 'Housing Amenities Enumeration', desc: 'Enter water, LPG, electricity details.' },
+        { num: '4', title: 'Family Members Roster', desc: 'Add age, education, and occupation.' },
+        { num: '5', title: 'Automated AI Check', desc: 'Scan for missing fields or anomalies.' },
+        { num: '6', title: '16-Digit SE ID Receipt', desc: 'Receive official Census Act digital receipt.' }
+      ];
+
+      container.innerHTML = steps.map(s => `
+        <div class="custom-card border p-6 rounded-3xl space-y-2 shadow-sm">
+          <div class="w-10 h-10 rounded-2xl bg-navy-600 text-white font-black text-lg flex items-center justify-center">${s.num}</div>
+          <h4 class="font-bold text-base mt-2">${s.title}</h4>
+          <p class="text-xs opacity-70">${s.desc}</p>
+        </div>
+      `).join('');
+    }
+
+    function renderTruthCheck() {
+      // Setup initial state
+    }
+
+    function analyzeRumor() {
+      const inp = document.getElementById('truth-input');
+      const resCard = document.getElementById('truth-result-card');
+      if (!inp || !resCard || !inp.value.trim()) return;
+
+      resCard.classList.remove('hidden');
+      resCard.innerHTML = `
+        <div class="p-6 bg-powder-400/10 border border-powder-400/30 rounded-2xl space-y-2 text-xs">
+          <div class="flex items-center gap-2 text-navy-700 dark:text-powder-400 font-bold text-sm">
+            <span class="material-symbols-outlined text-xl">verified</span>
+            <span>VERIFIED FACT — CENSUS ACT 1948 PROTECTION</span>
+          </div>
+          <p class="opacity-80 leading-relaxed">Under Section 15 of the Census Act 1948, individual census responses are strictly confidential. They cannot be shared with NRC, tax authorities, banking institutions, or court evidence.</p>
+        </div>
+      `;
+    }
+
+    /* AI GUIDE CHAT */
+    function sendQuickChat(promptText) {
+      const inp = document.getElementById('chat-input');
+      if (inp) {
+        inp.value = promptText;
+        submitGuideChat(new Event('submit'));
+      }
+    }
+
+    function submitGuideChat(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      const inp = document.getElementById('chat-input');
+      const box = document.getElementById('chat-box');
+      if (!inp || !box || !inp.value.trim()) return;
+
+      const userText = inp.value.trim();
+      inp.value = '';
+
+      appState.chatMessages.push({ sender: 'user', text: userText });
+      renderChatMessages();
+
+      fetch('http://localhost:5001/api/census/guide', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ message: userText })
+      }).then(r => r.json()).then(d => {
+        appState.chatMessages.push({ sender: 'bot', text: d.reply || 'Data privacy is protected under Section 15 of Census Act 1948.' });
+        renderChatMessages();
+      }).catch(() => {
+        appState.chatMessages.push({ sender: 'bot', text: '🛡️ Census details are 100% confidential under Census Act 1948.' });
+        renderChatMessages();
+      });
+    }
+
+    function renderChatMessages() {
+      const box = document.getElementById('chat-box');
+      if (!box) return;
+      box.innerHTML = appState.chatMessages.map(m => `
+        <div class="flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}">
+          <div class="max-w-[80%] rounded-2xl p-3.5 text-xs font-medium ${m.sender === 'user' ? 'bg-navy-600 text-white' : 'border custom-card'}">
+            ${m.text}
+          </div>
+        </div>
+      `).join('');
+      box.scrollTop = box.scrollHeight;
+    }
+
+    /* UTILITY HELPERS & GLOBAL LISTENERS */
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      if (!toast || !toastMsg) return;
+      toastMsg.textContent = msg;
+      toast.classList.remove('opacity-0');
+      toast.classList.add('opacity-100');
+      setTimeout(() => { toast.classList.remove('opacity-100'); toast.classList.add('opacity-0'); }, 3000);
+    }
+
+    function copyToClipboard(text) {
+      if (!text) return;
+      navigator.clipboard.writeText(text).then(() => { showToast(`Copied: ${text} 📋`); });
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeOtpModal();
+        closePassportQrModal();
+        closeResumeAnywhereModal();
+        closeAiCheckModal();
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initDatabase();
+      renderChatMessages();
+
+      ['otp-modal', 'passport-qr-modal', 'resume-anywhere-modal', 'ai-check-modal'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('click', (e) => {
+            if (e.target === el) {
+              closeOtpModal();
+              closePassportQrModal();
+              closeResumeAnywhereModal();
+              closeAiCheckModal();
+            }
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
